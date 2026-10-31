@@ -1,0 +1,141 @@
+@import "tailwindcss";
+
+/*
+ * Sistema visual de Inavitable: materiales de obra. Cal (fondo), cemento (líneas y neutros), tabique (acento) y carbón (tinta).
+ * Cada año de ahorro es un tabique: la metáfora se repite en el muro, el mapa y los botones.
+ */
+:root {
+  --bg: #f4f0e8; /* cal */
+  --surface: #ffffff;
+  --raised: #ebe5d9; /* cemento claro */
+  --ink: #1c1a17; /* carbón */
+  --ink-2: #4f4a42;
+  --ink-3: #736c61;
+  --line: #e0d9cc;
+  --line-strong: #c4bcad;
+
+  --tabique: #c2502b;
+  --tabique-oscuro: #8a3418;
+  --obra: #f0b429; /* amarillo de obra: solo como fondo o marca, nunca texto sobre claro */
+
+  /*
+   * Años de ahorro (secuencial: más oscuro = más años). Validado con dataviz validate_palette sobre #f4f0e8:
+   * separación ≥ 15 con y sin daltonismo; los tonos claros van con etiqueta o lista al lado.
+   */
+  --a-1: #ecd9b4;
+  --a-2: #e19a5e;
+  --a-3: #c2502b;
+  --a-4: #7a2614;
+  --sin-dato: #d9d3c7;
+
+  /* Serie de comparación (todo México) frente al tabique: ΔE 21.8, con daltonismo 11.6. */
+  --neutro: #4f4a42;
+
+  --focus: #1f6fc7;
+  color-scheme: light;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-raised: var(--raised);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-tabique: var(--tabique);
+  --color-tabique-oscuro: var(--tabique-oscuro);
+  --color-obra: var(--obra);
+  --color-critico: var(--tabique-oscuro);
+  --color-focus: var(--focus);
+
+  --font-display: var(--font-bricolage);
+  --font-sans: var(--font-instrument);
+}
+
+html {
+  background: var(--bg);
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-instrument), system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Números de la marca: grotesca, cifras de igual ancho para que no "bailen" al cambiar. */
+.cifra {
+  font-family: var(--font-bricolage), system-ui, sans-serif;
+  font-variant-numeric: tabular-nums lining-nums;
+  letter-spacing: -0.035em;
+}
+.num {
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+:focus-visible {
+  outline: 2.5px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+::selection {
+  background: #f6d98a;
+}
+
+/* Los tabiques del muro aparecen uno por uno (sin animación si se pide movimiento reducido). */
+@keyframes poner {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.tabique-anim {
+  animation: poner 360ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* MapLibre */
+.maplibregl-ctrl-group {
+  border-radius: 12px !important;
+  box-shadow: 0 0 0 1px var(--line-strong) !important;
+  overflow: hidden;
+}
+.maplibregl-ctrl-group button {
+  width: 40px !important;
+  height: 40px !important;
+}
+.maplibregl-ctrl-attrib {
+  font-size: 11px;
+}
+.globo .maplibregl-popup-content {
+  padding: 8px 12px;
+  border-radius: 12px;
+  font: 13px/1.35 var(--font-instrument), system-ui, sans-serif;
+  color: var(--ink);
+  box-shadow: 0 8px 28px rgba(28, 26, 23, 0.18);
+}
+.globo .maplibregl-popup-tip {
+  display: none;
+}

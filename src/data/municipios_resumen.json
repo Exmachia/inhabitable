@@ -1,0 +1,45 @@
+{
+ "desde": "2025-08",
+ "hasta": "2026-07",
+ "conDatos": 462,
+ "total": 2475,
+ "minimo": 50,
+ "mas100": 26,
+ "mas60": 52,
+ "peores": [
+  {
+   "g": "15037",
+   "n": "Huixquilucan",
+   "ent": "15",
+   "a": 152.5
+  },
+  {
+   "g": "19019",
+   "n": "San Pedro Garza García",
+   "ent": "19",
+   "a": 152.5
+  },
+  {
+   "g": "09008",
+   "n": "La Magdalena Contreras",
+   "ent": "09",
+   "a": 152.3
+  },
+  {
+   "g": "17002",
+   "n": "Atlatlahucan",
+   "ent": "17",
+   "a": 152.3
+  },
+  {
+   "g": "09004",
+   "n": "Cuajimalpa de Morelos",
+   "ent": "09",
+   "a": 152.1
+  }
+ ],
+ "slugsRepetidos": [
+  "20/san-juan-mixtepec",
+  "20/san-pedro-mixtepec"
+ ]
+}
