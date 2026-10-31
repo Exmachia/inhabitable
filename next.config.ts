@@ -11,7 +11,7 @@ const CSP = [
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https://tiles.openfreemap.org",
   "font-src 'self' data:",
-  "connect-src 'self' https://cloud.umami.is https://api-gateway.umami.dev https://tiles.openfreemap.org",
+  "connect-src 'self' https://cloud.umami.is https://api-gateway.umami.dev https://gateway.umami.is https://tiles.openfreemap.org",
   "worker-src 'self' blob:",
   "child-src 'self' blob:",
   "object-src 'none'",
