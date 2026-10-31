@@ -33,6 +33,7 @@ export const metadata: Metadata = {
   description: DESCRIPCION,
   openGraph: {
     title: TITULO,
+    url: "/",
     siteName: "Inavitable",
     description: DESCRIPCION,
     locale: "es_MX",

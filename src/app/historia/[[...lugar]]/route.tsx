@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 import { lugarDeRuta } from "@/lib/municipios";
-import { HISTORIA, TarjetaHistoria, fuentes } from "@/og/tarjeta";
+import { CACHE, HISTORIA, TarjetaHistoria, fuentes } from "@/og/tarjeta";
 
 /** Imagen vertical para historias (1080×1920): /historia, /historia/jalisco, /historia/jalisco/guadalajara. */
 export async function GET(_: Request, { params }: RouteContext<"/historia/[[...lugar]]">) {
@@ -10,6 +10,6 @@ export async function GET(_: Request, { params }: RouteContext<"/historia/[[...l
   return new ImageResponse(<TarjetaHistoria l={l} />, {
     ...HISTORIA,
     fonts: await fuentes(),
-    headers: { "Cache-Control": "public, max-age=86400, immutable" },
+    headers: CACHE,
   });
 }
