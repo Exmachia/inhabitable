@@ -5,8 +5,7 @@
  */
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
-import { COLOR_TRAMO, H, W, barda } from "@/lib/barda";
-import { AHORRO_PCT, ALCANZABLE, D, EDAD_INICIO, TOPE_ANIOS, aniosTxt, bajoPlazo, cuentas, nombreCompleto, type Lugar } from "@/lib/datos";
+import { AHORRO_PCT, ALCANZABLE, D, EDAD_INICIO, TOPE_ANIOS, aniosTxt, bajoPlazo, cuentas, nombreCompleto, remate, type Lugar } from "@/lib/datos";
 import { SITIO } from "@/lib/sitio";
 
 export const OG = { width: 1200, height: 630 };
@@ -52,22 +51,6 @@ function datos(l: Lugar) {
   };
 }
 
-/** La barda de vida, en SVG plano (sin patrones: la trama se dibuja como contorno). */
-function Barda({ l, ancho }: { l: Lugar; ancho: number }) {
-  const c = cuentas(l);
-  const b = barda(c.terminas, l.ev, !!l.tope);
-  const alto = (ancho * (b.alto + 8)) / (b.ancho + 8);
-  return (
-    <svg width={ancho} height={alto} viewBox={`-4 -4 ${b.ancho + 8} ${b.alto + 8}`}>
-      {b.tabiques.map((t, i) => {
-        const col = COLOR_TRAMO[t.tramo];
-        return <rect key={i} x={t.x} y={t.y} width={W} height={H} rx={1.5} fill={col.fill} stroke={col.stroke} strokeWidth={t.tramo === "fuera" ? 1.4 : 0.6} />;
-      })}
-      {b.linea && <path d={b.linea} fill="none" stroke={CARBON} strokeWidth={2.4} />}
-    </svg>
-  );
-}
-
 function Marca({ tam }: { tam: number }) {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: tam * 0.3, fontFamily: "Bricolage", fontSize: tam, letterSpacing: -tam * 0.03 }}>
@@ -79,18 +62,6 @@ function Marca({ tam }: { tam: number }) {
       <span>Inavitable</span>
     </div>
   );
-}
-
-/** "Casi 5 veces el plazo oficial.": la cifra del lugar contra los 20 años que CONAVI llama alcanzables. */
-export function remate(n: number, tope: boolean) {
-  if (tope) return `Más de ${Math.floor(TOPE_ANIOS / ALCANZABLE)} veces el plazo oficial.`;
-  // En 20 años o menos no se compara con el plazo oficial: esos lugares van en pesos (bajoPlazo).
-  if (Math.round(n) <= ALCANZABLE) return null;
-  const r = n / ALCANZABLE;
-  if (r < 1.7) return Math.round(n - ALCANZABLE) === 1 ? "1 año más que el plazo oficial." : `${Math.round(n - ALCANZABLE)} años más que el plazo oficial.`;
-  const f = Math.floor(r);
-  if (r - f >= 0.7) return f + 1 === 2 ? "Casi el doble del plazo oficial." : `Casi ${f + 1} veces el plazo oficial.`;
-  return f === 2 ? "Más del doble del plazo oficial." : `Más de ${f} veces el plazo oficial.`;
 }
 
 /** Título-hallazgo con el número en tabique oscuro: "Con el mínimo, 96 años para juntar una casa." */
@@ -163,18 +134,25 @@ export function TarjetaOG({ l }: { l: Lugar }) {
   );
 }
 
-/** Historia, 1080×1920 (opción A arriba, la barda de vida abajo), con margen arriba y abajo (Instagram tapa ~230 px de cada lado). */
+/** Historia, 1080×1920 (opción A en vertical), con margen arriba y abajo (Instagram tapa ~230 px de cada lado). */
 export function TarjetaHistoria({ l }: { l: Lugar }) {
   const d = datos(l);
   const b = barras(d);
-  const escala = 300 / Math.max(b.larga.n, b.corta.n);
-  const bajo = Math.round(b.corta.n * escala);
+  const escala = 640 / Math.max(b.larga.n, b.corta.n);
+  const bajo = Math.max(Math.round(b.corta.n * escala), 8);
   const alto = Math.max(Math.round(b.larga.n * escala), 8);
-  const barra = (h: number, color: string, etiqueta: string, cifra: string, grande: boolean) => (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-end", width: 300 }}>
-      <span style={{ fontFamily: "Bricolage", fontSize: grande ? 72 : 44, letterSpacing: -2 }}>{cifra}</span>
-      <div style={{ display: "flex", width: 220, height: h, background: color, borderRadius: 6, marginTop: 10 }} />
-      <span style={{ display: "flex", textAlign: "center", marginTop: 14, fontSize: 28, lineHeight: 1.15, color: TINTA_2, maxWidth: 300 }}>{etiqueta}</span>
+  const ev = Math.round(l.ev);
+  const noAlcanza = !d.bajo && (d.tope || d.terminas > ev);
+  const barra = (h: number, color: string, etiqueta: string, cifra: string, grande: boolean, zigzag: boolean) => (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-end", width: 340 }}>
+      <span style={{ fontFamily: "Bricolage", fontSize: grande ? 96 : 56, letterSpacing: -2, lineHeight: 1 }}>{cifra}</span>
+      {zigzag && (
+        <svg width={260} height={14} viewBox="0 0 260 14" style={{ marginTop: 10 }}>
+          <path d="M0 14L0 0L21.7 14L43.3 0L65 14L86.7 0L108.3 14L130 0L151.7 14L173.3 0L195 14L216.7 0L238.3 14L260 0L260 14Z" fill={color} />
+        </svg>
+      )}
+      <div style={{ display: "flex", width: 260, height: zigzag ? h - 14 : h, background: color, borderRadius: zigzag ? "0 0 6px 6px" : 6, marginTop: zigzag ? 0 : 10 }} />
+      <span style={{ display: "flex", textAlign: "center", marginTop: 14, fontSize: 30, lineHeight: 1.15, color: TINTA_2, maxWidth: 340 }}>{etiqueta}</span>
     </div>
   );
   return (
@@ -182,26 +160,23 @@ export function TarjetaHistoria({ l }: { l: Lugar }) {
       <div style={{ display: "flex", alignSelf: "flex-start", background: OBRA, border: `4px solid ${CARBON}`, borderRadius: 28, padding: "12px 26px", fontFamily: "Bricolage", fontSize: d.lugar.length > 28 ? 40 : 48, letterSpacing: -1.2 }}>
         {d.lugar}
       </div>
-      <div style={{ display: "flex", marginTop: 30 }}>
-        <Titulo d={d} tam={76} />
+      <div style={{ display: "flex", marginTop: 40 }}>
+        <Titulo d={d} tam={84} />
       </div>
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "flex-end", gap: 60, marginTop: 30 }}>
-        {barra(bajo, TINTA_2, b.corta.etiqueta, d.bajo ? b.corta.txt : `${ALCANZABLE} años`, false)}
-        {barra(alto, TABIQUE, b.larga.etiqueta, d.bajo ? b.larga.txt : `${d.cifra} años`, true)}
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "flex-end", gap: 80, marginTop: 50 }}>
+        {barra(bajo, TINTA_2, b.corta.etiqueta, d.bajo ? b.corta.txt : `${ALCANZABLE} años`, false, false)}
+        {barra(alto, TABIQUE, b.larga.etiqueta, d.bajo ? b.larga.txt : d.tope ? `${TOPE_ANIOS}+` : `${d.cifra} años`, true, d.tope)}
       </div>
-      {/* En 20 años o menos la barda casi entera es "lo que queda" y se ve tranquila: su lugar lo ocupa el remate en grande. */}
-      {b.remate && !d.bajo && <div style={{ display: "flex", marginTop: 30, fontSize: 44, fontWeight: 700 }}>{b.remate}</div>}
-      {d.nota && <div style={{ display: "flex", marginTop: 12, fontSize: 30, fontWeight: 700 }}>{d.nota}</div>}
-      {d.bajo ? (
-        <div style={{ display: "flex", flex: 1, alignItems: "center", marginTop: 20, fontFamily: "Bricolage", fontSize: 64, lineHeight: 1.05, letterSpacing: -1.6 }}>{b.remate}</div>
-      ) : (
-        <div style={{ display: "flex", flexDirection: "column", flex: 1, justifyContent: "center", alignItems: "center", marginTop: 20 }}>
-          <span style={{ display: "flex", alignSelf: "flex-start", fontSize: 28, color: TINTA_2, marginBottom: 12 }}>Tu vida en tabiques, uno por año. Empiezas a los {EDAD_INICIO}.</span>
-          <Barda l={l} ancho={360} />
+      {b.remate && <div style={{ display: "flex", marginTop: 56, fontSize: 52, lineHeight: 1.1, fontWeight: 700 }}>{b.remate}</div>}
+      {noAlcanza && (
+        <div style={{ display: "flex", marginTop: 16, fontSize: 36, lineHeight: 1.2, color: TINTA_2 }}>
+          {d.tope ? `Terminarías después de los ${EDAD_INICIO + TOPE_ANIOS}.` : `Terminarías a los ${d.terminas}.`} Aquí se vive en promedio {ev}.
         </div>
       )}
+      {d.nota && <div style={{ display: "flex", marginTop: 12, fontSize: 30, fontWeight: 700 }}>{d.nota}</div>}
+      <div style={{ display: "flex", flex: 1 }} />
       <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 14 }}>
-        <div style={{ display: "flex", fontFamily: "Bricolage", fontSize: 60, letterSpacing: -1.6 }}>¿Y dónde vives tú?</div>
+        <div style={{ display: "flex", fontFamily: "Bricolage", fontSize: 64, letterSpacing: -1.6 }}>¿Y dónde vives tú?</div>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
           <Marca tam={40} />
           <span style={{ fontSize: 36, fontWeight: 700 }}>{dominio()}</span>

@@ -1,5 +1,5 @@
 import { ALCANZABLE, CAROS, DATO_MUN, DATO_PRECIOS, TOPE_ANIOS, VIDA_LABORAL, anios, deLugar } from "@/lib/datos";
-import Barras from "./Barras";
+import { BarrasCompactas } from "./Barras";
 import { Ayuda } from "./ui";
 
 const casaBarataDe = (nombre: string) => `Una casa barata ${deLugar(nombre)}`;
@@ -11,29 +11,26 @@ const casaBarataDe = (nombre: string) => `Una casa barata ${deLugar(nombre)}`;
 export default function CaroBarato() {
   return (
     <article className="overflow-hidden rounded-[28px] border-2 border-ink bg-surface shadow-[0_8px_0_0_var(--ink)]">
-      <header className="flex items-start justify-between gap-3 border-b-2 border-ink px-5 py-4 sm:px-7">
-        <div>
-          <p className="text-[12px] font-bold tracking-[0.08em] uppercase">Con el salario mínimo, ahorrando el 30 %</p>
-          <h2 className="font-display text-[1.7rem] leading-tight font-extrabold tracking-[-0.02em] sm:text-[2rem]">Caro y barato, lado a lado</h2>
-        </div>
+      <header className="flex items-center justify-between gap-3 border-b-2 border-ink px-5 py-3 sm:px-7">
+        <p className="text-[12px] font-bold tracking-[0.08em] uppercase">Con el salario mínimo, ahorrando el 30 %</p>
         <AyudaCaroBarato />
       </header>
-      <div className="px-5 py-6 sm:px-7">
-        <div className="grid gap-7">
+      <div className="px-5 py-5 sm:px-7">
+        <Leyenda />
+        <div className="mt-5 grid gap-5">
           {CAROS.map((c) => (
-            <section key={c.g} aria-label={`${c.n} y ${c.estado.nombre}`}>
-              <h3 className="mb-2.5 text-[15px] font-bold">{c.n} <span className="font-medium text-ink-3">· {c.estado.nombre}</span></h3>
-              <Barras id={`cb-${c.g}`} tope={TOPE_ANIOS} referencia={{ valor: VIDA_LABORAL, texto: "" }}
+            <section key={c.g} aria-label={`${c.n}: más de ${TOPE_ANIOS} años. ${casaBarataDe(c.estado.nombre)}: ${anios(c.estado.anios30Barata)} años.`}>
+              <h3 className="mb-1.5 text-[15px] font-bold text-balance">{c.n} <span className="font-medium text-ink-3">· {c.estado.nombre}</span></h3>
+              <BarrasCompactas id={`cb-${c.g}`} tope={TOPE_ANIOS} referencia={VIDA_LABORAL}
                 barras={[
-                  { id: "caro", etiqueta: `Una casa típica en ${c.n}`, valor: c.a, texto: `${TOPE_ANIOS}+ años`, tono: "tabique" },
-                  { id: "barata", etiqueta: casaBarataDe(c.estado.nombre), valor: c.estado.anios30Barata, texto: `${anios(c.estado.anios30Barata)} años`, tono: "claro" },
+                  { id: "caro", etiqueta: `Casa típica en ${c.n}`, valor: c.a, texto: `${TOPE_ANIOS}+`, tono: "tabique" },
+                  { id: "barata", etiqueta: casaBarataDe(c.estado.nombre), valor: c.estado.anios30Barata, texto: `${anios(c.estado.anios30Barata)}`, tono: "claro" },
                 ]} />
             </section>
           ))}
         </div>
-        <ReferenciaVida />
-        <p className="mt-6 rounded-2xl bg-raised px-4 py-3 text-[15px] leading-snug text-ink-2">
-          <strong className="font-bold text-ink">Hasta lo barato tarda más de {ALCANZABLE} años,</strong> el plazo que el gobierno considera alcanzable.
+        <p className="mt-5 text-[15px] leading-snug">
+          <strong className="font-bold">Hasta lo barato pasa de {ALCANZABLE} años,</strong> lo que el gobierno llama alcanzable.
         </p>
       </div>
       <footer className="border-t border-line px-5 py-3.5 text-[13px] text-ink-3 sm:px-7">
@@ -43,20 +40,14 @@ export default function CaroBarato() {
   );
 }
 
-/** La vara de la gráfica: una vida de trabajo (18 a 65), en la misma escala de 0 a 150 años. */
-function ReferenciaVida() {
+/** Una sola leyenda para todas las barras: qué es cada color y la raya de una vida de trabajo (18 a 65). */
+function Leyenda() {
   return (
-    <div className="mt-5">
-      <div aria-hidden className="relative h-6 text-[12px] text-ink-3">
-        {[0, 50, 100, TOPE_ANIOS].map((v) => (
-          <span key={v} className="num absolute -translate-x-1/2 first:translate-x-0 last:-translate-x-full" style={{ left: `${(v / TOPE_ANIOS) * 100}%` }}>{v}</span>
-        ))}
-      </div>
-      <p className="flex items-center gap-2 text-[13px] text-ink-2">
-        <span aria-hidden className="h-3.5 w-[2.5px] rounded-full bg-ink" />
-        Una vida de trabajo: de los 18 a los 65 ({VIDA_LABORAL} años)
-      </p>
-    </div>
+    <p className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[13px] text-ink-2">
+      <span className="flex items-center gap-1.5"><span aria-hidden className="size-3 rounded-[2px] bg-tabique" />Casa típica del municipio</span>
+      <span className="flex items-center gap-1.5"><span aria-hidden className="size-3 rounded-[2px] bg-[var(--a-2)]" />Casa barata del mismo estado</span>
+      <span className="flex items-center gap-1.5"><span aria-hidden className="h-3.5 w-[2.5px] rounded-full bg-ink" />Una vida de trabajo ({VIDA_LABORAL} años)</span>
+    </p>
   );
 }
 
