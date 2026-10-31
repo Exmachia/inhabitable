@@ -42,23 +42,24 @@ export default function Pagina({ inicial }: { inicial: Lugar | null }) {
 
 function Portada({ inicial }: { inicial: Lugar | null }) {
   return (
-    <section className="mx-auto max-w-7xl px-4 pt-24 pb-16 sm:px-8 lg:pt-32 lg:pb-24">
-      <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-16">
-        <div className="lg:sticky lg:top-28">
-          <p className="inline-flex items-center gap-2 rounded-full border-2 border-ink bg-surface px-3 py-1 text-[13px] font-bold">
-            <span aria-hidden className="size-2 rounded-full bg-tabique" />
-            Salario mínimo {D.fuentes.salario.anio}: {pesos(SM)} al día
-          </p>
-          <h1 className="mt-6 font-display text-[clamp(2.5rem,5.6vw,4.6rem)] leading-[0.95] font-extrabold tracking-[-0.045em] text-balance">
-            {inicial ? titularDe(inicial) : TITULAR_CAROS}
-          </h1>
-          <div className="mt-6 flex max-w-[44ch] items-start gap-2">
-            <p className="text-[1.15rem] leading-relaxed text-ink-2">
-              Ahorrando el {AHORRO_PCT}% de lo que ganas. En todo México son {aniosTxt(NAC.anios30)}.
-            </p>
-            <div className="pt-0.5"><AyudaTitular /></div>
-          </div>
-          <p className="mt-8 text-[15px] font-bold">¿Y dónde vives tú?</p>
+    <section className="mx-auto max-w-7xl px-4 pt-24 pb-16 sm:px-8 lg:pt-28 lg:pb-20">
+      <p className="inline-flex items-center gap-2 rounded-full border-2 border-ink bg-surface px-3 py-1 text-[13px] font-bold">
+        <span aria-hidden className="size-2 rounded-full bg-tabique" />
+        Salario mínimo {D.fuentes.salario.anio}: {pesos(SM)} al día
+      </p>
+      <h1 className="mt-6 max-w-[22ch] font-display text-[clamp(2.5rem,6vw,5rem)] leading-[0.95] font-extrabold tracking-[-0.045em] text-balance">
+        {inicial ? titularDe(inicial) : TITULAR_CAROS}
+      </h1>
+      <div className="mt-6 flex max-w-[52ch] items-start gap-2">
+        <p className="text-[1.15rem] leading-relaxed text-ink-2">
+          Ahorrando el {AHORRO_PCT}% de lo que ganas. En todo México son {aniosTxt(NAC.anios30)}.
+        </p>
+        <div className="pt-0.5"><AyudaTitular /></div>
+      </div>
+      {/* Primero el hallazgo a todo el ancho; abajo, el buscador y la prueba, a la misma altura. */}
+      <div className="mt-12 grid items-start gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-12">
+        <div>
+          <p className="text-[15px] font-bold">¿Y dónde vives tú?</p>
           <div className="mt-3 max-w-xl">
             <Buscador grande />
           </div>
@@ -224,10 +225,10 @@ function AyudaAntes() {
 
 function QuienGana() {
   const grupos = [
-    { id: "uno", label: "Gana un salario mínimo o menos", pct: ENOE.pctHastaUnSM, color: "var(--tabique)" },
-    { id: "no", label: "Trabaja sin recibir pago", pct: ENOE.pctNoRecibe, color: "var(--a-4)" },
-    { id: "mas", label: "Gana más", pct: ENOE.pctMasDeUnSM, color: "var(--line-strong)" },
-    { id: "ns", label: "No dijo cuánto", pct: ENOE.pctNoEspecificado, color: "var(--raised)" },
+    { id: "uno", label: "Gana un salario mínimo o menos", leyenda: "ganan el mínimo o menos", pct: ENOE.pctHastaUnSM, color: "var(--tabique)" },
+    { id: "no", label: "Trabaja sin recibir pago", leyenda: "trabajan sin recibir pago", pct: ENOE.pctNoRecibe, color: "var(--a-4)" },
+    { id: "mas", label: "Gana más", leyenda: "ganan más", pct: ENOE.pctMasDeUnSM, color: "var(--line-strong)" },
+    { id: "ns", label: "No dijo cuánto", leyenda: "no dijeron cuánto", pct: ENOE.pctNoEspecificado, color: "var(--raised)" },
   ];
   // Método del mayor residuo: siempre suman 100.
   const total = grupos.reduce((s, g) => s + g.pct, 0);
@@ -239,21 +240,22 @@ function QuienGana() {
 
   return (
     <section id="quien" className="scroll-mt-16">
-      <div className="mx-auto grid max-w-7xl items-center gap-12 px-4 py-20 sm:px-8 lg:grid-cols-2 lg:py-28">
+      <div className="mx-auto max-w-7xl px-4 py-20 sm:px-8 lg:py-28">
         <Aparecer>
           <p className="text-[14px] font-bold text-tabique-oscuro">Quién gana eso</p>
-          <div className="mt-3 flex items-start gap-3">
+          <div className="mt-3 flex max-w-[24ch] items-start gap-3">
             <h2 className={H2}>Casi 1 de cada 2 personas que trabajan gana el mínimo o menos</h2>
             <div className="pt-2"><AyudaQuien /></div>
           </div>
-          <p className="mt-5 text-[1.1rem] leading-relaxed text-ink-2">
+          <p className="mt-5 max-w-[60ch] text-[1.1rem] leading-relaxed text-ink-2">
             {fmt(ENOE.personasHastaUnSM / 1e6, 1)} millones. A inicios de 2025 eran {Math.round(TEND.antes.pct)} de cada 100; a inicios de 2026, {Math.round(TEND.ahora.pct)}.
           </p>
           <p className="mt-2 text-[13px] text-ink-3">INEGI, ENOE, {ENOE.periodo} · publicado el {fechaCorta(ENOE.publicado)} · tendencia: 1.er trim. contra 1.er trim., vía prensa</p>
         </Aparecer>
         <Aparecer retraso={120}>
-          <figure className="rounded-[28px] border-2 border-ink bg-surface p-5 sm:p-7">
-            <div className="grid grid-cols-10 gap-x-1.5 gap-y-2" role="img"
+          <figure className="mt-10 grid items-center gap-8 rounded-[28px] border-2 border-ink bg-surface p-5 sm:p-7 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:gap-10">
+            {/* Se llena por columnas: las del mínimo o menos quedan juntas a la izquierda y se ve "casi la mitad" sin contar. */}
+            <div className="grid max-w-[640px] grid-flow-col grid-rows-5 gap-x-1 gap-y-1.5 sm:gap-x-1.5 sm:gap-y-2" role="img"
               aria-label={`De cada 100 personas que trabajan: ${grupos.map((g, i) => `${g.label}, ${cuadros[i]}`).join("; ")}.`}>
               {personas.map((g, i) => (
                 <svg key={i} viewBox="0 0 20 36" className="h-auto w-full" aria-hidden>
@@ -263,16 +265,16 @@ function QuienGana() {
               ))}
             </div>
             <figcaption>
-              <ul className="mt-6 grid gap-2 text-[15px]">
+              <ul className="grid grid-cols-2 gap-x-4 gap-y-3 lg:grid-cols-1">
                 {grupos.map((g, i) => (
-                  <li key={g.id} className="flex items-center gap-3">
-                    <span aria-hidden className="size-3.5 shrink-0 rounded-full ring-1 ring-black/15" style={{ background: g.color }} />
-                    <span className="min-w-0 flex-1">{g.label}</span>
-                    <span className="num font-bold">{cuadros[i]}</span>
+                  <li key={g.id} className="flex items-baseline gap-2.5">
+                    <span aria-hidden className="size-3.5 shrink-0 self-center rounded-full ring-1 ring-black/15" style={{ background: g.color }} />
+                    <span className="cifra text-[1.5rem] leading-none font-extrabold lg:text-[2rem]">{cuadros[i]}</span>
+                    <span className="min-w-0 text-[14px] leading-snug text-ink-2 lg:text-[15px]">{g.leyenda}</span>
                   </li>
                 ))}
               </ul>
-              <p className="mt-3 text-[13px] text-ink-3">De cada 100 personas que trabajan</p>
+              <p className="mt-4 text-[13px] text-ink-3">De cada 100 personas que trabajan</p>
             </figcaption>
           </figure>
         </Aparecer>

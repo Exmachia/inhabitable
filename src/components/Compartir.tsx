@@ -51,6 +51,9 @@ export default function Compartir({ l: elegido, propio }: { l: Lugar; propio: bo
 
   return (
     <div className="border-t-2 border-ink px-5 py-5 sm:px-7">
+      <p className={`mb-3 text-[13px] ${propio ? "font-bold text-tabique-oscuro" : "text-ink-2"}`}>
+        Así se comparte: con el salario mínimo, nunca con tu sueldo.{elegido.prestado ? ` Y con la cifra de ${l.nombre}.` : ""}
+      </p>
       <div className="flex flex-wrap gap-2">
         <a href={`https://wa.me/?text=${encodeURIComponent(`${texto} `)}`} target="_blank" rel="noopener noreferrer"
           onClick={(e) => {
@@ -81,9 +84,6 @@ export default function Compartir({ l: elegido, propio }: { l: Lugar; propio: bo
             className="mt-1.5 h-11 w-full rounded-full border-2 border-ink-3 bg-surface px-4 text-[15px] outline-none focus:border-ink" />
         </div>
       )}
-      <p className={`mt-3 text-[13px] ${propio ? "font-bold text-tabique-oscuro" : "text-ink-2"}`}>
-        Se comparte con el salario mínimo, nunca con tu sueldo.{elegido.prestado ? ` Y con la cifra de ${l.nombre}.` : ""}
-      </p>
       <span className="sr-only" role="status">{copiado ? "Enlace copiado al portapapeles" : ""}</span>
     </div>
   );

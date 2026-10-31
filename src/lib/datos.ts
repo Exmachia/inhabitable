@@ -184,6 +184,18 @@ export function bajoPlazo(l: Lugar) {
   };
 }
 
+/** "Casi 5 veces el plazo oficial.": la cifra del lugar contra los 20 años que CONAVI llama alcanzables. */
+export function remate(n: number, tope: boolean) {
+  if (tope) return `Más de ${Math.floor(TOPE_ANIOS / ALCANZABLE)} veces el plazo oficial.`;
+  // En 20 años o menos no se compara con el plazo oficial: esos lugares van en pesos (bajoPlazo).
+  if (Math.round(n) <= ALCANZABLE) return null;
+  const r = n / ALCANZABLE;
+  if (r < 1.7) return Math.round(n - ALCANZABLE) === 1 ? "1 año más que el plazo oficial." : `${Math.round(n - ALCANZABLE)} años más que el plazo oficial.`;
+  const f = Math.floor(r);
+  if (r - f >= 0.7) return f + 1 === 2 ? "Casi el doble del plazo oficial." : `Casi ${f + 1} veces el plazo oficial.`;
+  return f === 2 ? "Más del doble del plazo oficial." : `Más de ${f} veces el plazo oficial.`;
+}
+
 /* ---------- Direcciones: /jalisco y /jalisco/guadalajara ---------- */
 
 /** Igual que slug() en scripts/build_municipios.py. */

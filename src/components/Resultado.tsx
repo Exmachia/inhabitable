@@ -2,20 +2,18 @@
 
 import { useEffect, useRef, useState } from "react";
 import {
-  AHORRO_PCT, ALCANZABLE, D, DATO_MUN, DATO_PRECIOS, EDAD_INICIO, INFO, NAC, PAGO_INFO, SM, TOPE_ANIOS, aniosTxt, conArticulo, cuentas, deLugar,
-  diarioDeMensual, dinero, fmt, INFO_TXT, millones, pesos, PODER_INFO, PODER_TXT, type Lugar,
+  AHORRO_PCT, ALCANZABLE, D, DATO_MUN, DATO_PRECIOS, EDAD_INICIO, INFO, NAC, PAGO_INFO, SM, TOPE_ANIOS, aniosTxt, bajoPlazo, conArticulo, cuentas, deLugar,
+  diarioDeMensual, dinero, fmt, INFO_TXT, millones, pesos, PODER_INFO, PODER_TXT, remate, type Lugar,
 } from "@/lib/datos";
 import { registrar } from "@/lib/analytics";
-import Barras from "./Barras";
+import Barras, { DosBarras } from "./Barras";
 import Compartir from "./Compartir";
-import TuVida from "./TuVida";
 import { Ayuda } from "./ui";
 
-type Escenario = "ahorro" | "infonavit" | "todo";
+type Escenario = "ahorro" | "infonavit";
 const ESCENARIOS: [Escenario, string][] = [
   ["ahorro", `Ahorrando ${AHORRO_PCT}%`],
   ["infonavit", "Con INFONAVIT"],
-  ["todo", "Sin gastar nada"],
 ];
 
 const donde = (l: Lugar) => (l.tipo === "pais" ? "México" : conArticulo(l.tipo === "estado" ? l.nombre : l.en!));
@@ -35,24 +33,22 @@ export default function Resultado({ l, mensual, setMensual, onVolver }: {
   const propio = mensual != null && mensual > 0;
   const c = cuentas(l, propio ? diarioDeMensual(mensual) : l.salario);
   const mas = !!l.tope;
-  const ahorrando = esc === "ahorro";
-  const terminas = ahorrando ? c.terminas : EDAD_INICIO + Math.round(c.completo);
 
   return (
     <article aria-labelledby="resultado-t" className="relative overflow-hidden rounded-[28px] border-2 border-ink bg-surface shadow-[0_8px_0_0_var(--ink)]">
-      <header className="border-b-2 border-ink bg-obra px-5 py-4 sm:px-7">
+      <header className="border-b-2 border-ink bg-obra px-5 py-3 sm:px-7">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
             <p className="text-[12px] font-bold tracking-[0.08em] text-ink uppercase">
               {l.tipo === "pais" ? "País" : l.tipo === "estado" ? "Estado" : `Municipio · ${l.en}`}
             </p>
-            <h2 id="resultado-t" className="truncate font-display text-[1.7rem] leading-tight font-bold tracking-[-0.02em] sm:text-[2rem]">{l.nombre}</h2>
+            <h2 id="resultado-t" className="truncate font-display text-[1.5rem] leading-tight font-bold tracking-[-0.02em]">{l.nombre}</h2>
           </div>
           <AyudaResultado l={l} />
         </div>
-        <p className="mt-2 inline-flex items-center rounded-full border-2 border-ink bg-surface px-3 py-0.5 text-[13px] font-bold">
-          {propio ? "Con lo que te llega" : "Con el salario mínimo"}
-        </p>
+        {propio && (
+          <p className="mt-2 inline-flex items-center rounded-full border-2 border-ink bg-tabique-oscuro px-3 py-0.5 text-[13px] font-bold text-white">Con lo que te llega</p>
+        )}
       </header>
 
       {l.prestado && (
@@ -61,7 +57,7 @@ export default function Resultado({ l, mensual, setMensual, onVolver }: {
         </p>
       )}
 
-      <div role="tablist" aria-label="Escenario" className="mx-5 mt-5 grid grid-cols-3 gap-1 rounded-full bg-raised p-1 sm:mx-7">
+      <div role="tablist" aria-label="Escenario" className="mx-5 mt-5 grid grid-cols-2 gap-1 rounded-full bg-raised p-1 sm:mx-7">
         {ESCENARIOS.map(([v, t]) => (
           <button key={v} type="button" role="tab" aria-selected={esc === v} onClick={() => setEsc(v)}
             className={`min-h-11 cursor-pointer rounded-full px-1.5 text-[13px] leading-tight font-semibold transition-colors sm:text-[14px] ${
@@ -76,21 +72,7 @@ export default function Resultado({ l, mensual, setMensual, onVolver }: {
         {esc === "infonavit" ? (
           <ConInfonavit l={l} c={c} propio={propio} />
         ) : (
-          <>
-            <p className="flex items-baseline gap-3">
-              <span className="cifra text-[clamp(4.5rem,15vw,7.5rem)] leading-[0.85] font-extrabold">
-                {ahorrando ? (!mas && Math.round(c.ahorrando) < 1 ? "<1" : aniosTxt(c.ahorrando, mas)) : fmt(c.completo, 1)}
-              </span>
-              <span className="font-display text-[1.6rem] font-bold">{ahorrando && !mas && Math.round(c.ahorrando) <= 1 ? "año" : "años"}</span>
-            </p>
-            <Frase l={l} terminas={terminas} mas={mas && ahorrando} todo={!ahorrando} />
-            <div className="mt-6">
-              <TuVida terminas={terminas} ev={l.ev} mas={mas && ahorrando} donde={donde(l)} clave={`${l.id}-${esc}`} />
-            </div>
-            <p className="mt-5 border-t border-line pt-4 text-[14px] text-ink-2">
-              El gobierno considera alcanzable pagar una casa en <strong className="font-bold text-ink">{ALCANZABLE} años</strong> (CONAVI).
-            </p>
-          </>
+          <ContraPlazo l={l} c={c} propio={propio} />
         )}
 
         <CampoSalario mensual={mensual} setMensual={setMensual} />
@@ -112,20 +94,47 @@ export default function Resultado({ l, mensual, setMensual, onVolver }: {
   );
 }
 
-/** La frase cruda: a qué edad terminas de juntar y cuánta vida te queda. */
-function Frase({ l, terminas, mas, todo }: { l: Lugar; terminas: number; mas: boolean; todo: boolean }) {
+/**
+ * Lo mismo que la tarjeta para compartir: el lugar contra los 20 años que el gobierno llama alcanzables (o, en municipios de
+ * 20 años o menos, en pesos). Si no alcanza la vida, se dice; si alcanza, no hay consuelo que contar.
+ */
+function ContraPlazo({ l, c, propio }: { l: Lugar; c: ReturnType<typeof cuentas>; propio: boolean }) {
+  const mas = !!l.tope;
+  const bajo = propio ? null : bajoPlazo(l);
   const ev = Math.round(l.ev);
-  const fin = mas ? `más de ${EDAD_INICIO + TOPE_ANIOS}` : `${terminas}`;
+  const n = mas ? TOPE_ANIOS : c.ahorrando;
+  const cifra = mas ? `${TOPE_ANIOS}+` : !mas && Math.round(n) < 1 ? "<1" : aniosTxt(n);
+  const unidad = !mas && Math.round(n) <= 1 ? "año" : "años";
+  const conMinimo = aniosTxt(cuentas(l).ahorrando, mas);
+  const fin = mas ? `después de los ${EDAD_INICIO + TOPE_ANIOS}` : `a los ${c.terminas}`;
+  const texto = bajo
+    ? bajo.remate
+    : remate(n, mas) ?? (propio ? `Debajo del plazo oficial. Con el mínimo serían ${conMinimo}.` : null);
+
+  if (bajo) {
+    return (
+      <div>
+        <DosBarras id={`plazo-${l.id}`} etiqueta={`${bajo.corta.etiqueta}: ${bajo.corta.txt}. ${bajo.larga.etiqueta}: ${bajo.larga.txt}. ${bajo.remate}`}
+          corta={{ etiqueta: bajo.corta.etiqueta, valor: bajo.corta.valor, texto: bajo.corta.txt }}
+          larga={{ etiqueta: bajo.larga.etiqueta, valor: bajo.larga.valor, cifra: bajo.larga.txt }} />
+        <p className="mt-5 font-display text-[1.375rem] leading-tight font-bold">{bajo.remate}</p>
+      </div>
+    );
+  }
+  const etiquetaLarga = propio ? "Con lo que te llega" : `Con el mínimo ${l.tipo === "pais" ? "en todo México" : `en ${l.nombre}`}`;
   return (
-    <p className="mt-4 max-w-[38ch] text-[17px] leading-snug text-ink-2">
-      {todo && <>Sin comer, sin pagar renta, sin transporte. </>}
-      Empiezas a trabajar a los {EDAD_INICIO} y terminas de juntar a los <strong className="font-bold text-ink">{fin}</strong>.{" "}
-      {terminas <= ev && !mas ? (
-        <>En {donde(l)} se vive en promedio {ev} años: {ev - terminas === 1 ? "te quedaría" : "te quedarían"} <strong className="font-bold text-ink">{ev - terminas}</strong> para vivir.</>
-      ) : (
-        <>En {donde(l)} se vive en promedio {ev} años. <strong className="font-bold text-tabique-oscuro">No te alcanza la vida.</strong></>
+    <div>
+      <DosBarras id={`plazo-${l.id}`} tope={mas}
+        etiqueta={`Lo que el gobierno llama alcanzable: ${ALCANZABLE} años. ${etiquetaLarga}: ${mas ? `más de ${TOPE_ANIOS}` : cifra} ${unidad}.${texto ? ` ${texto}` : ""}`}
+        corta={{ etiqueta: "Lo que el gobierno llama alcanzable", valor: ALCANZABLE, texto: `${ALCANZABLE} años` }}
+        larga={{ etiqueta: etiquetaLarga, valor: n, cifra, unidad }} />
+      {texto && <p className="mt-5 font-display text-[1.375rem] leading-tight font-bold">{texto}</p>}
+      {(mas || c.terminas > ev) && (
+        <p className="mt-3 max-w-[40ch] text-[15px] leading-snug text-ink-2">
+          Terminarías de juntar {fin}. En {donde(l)} se vive en promedio {ev}. <strong className="font-bold text-tabique-oscuro">No te alcanza la vida.</strong>
+        </p>
       )}
-    </p>
+    </div>
   );
 }
 
@@ -168,7 +177,6 @@ function ConInfonavit({ l, c, propio }: { l: Lugar; c: ReturnType<typeof cuentas
       <p className="mt-4 rounded-2xl bg-raised px-4 py-3 text-[15px] leading-snug text-ink-2">
         <strong className="font-bold text-ink">Más de la mitad trabaja sin seguro social:</strong> para ellos no hay INFONAVIT.
       </p>
-      <p className="mt-3 text-[13px] text-ink-3">Monto y tasa del INFONAVIT: citados por prensa con su simulador, sin publicación oficial a la vista.</p>
     </div>
   );
 }
@@ -269,6 +277,9 @@ function AyudaResultado({ l }: { l: Lugar }) {
       </p>
       <p>
         <strong>Lo que no incluye:</strong> intereses, escrituración, aumentos, aguinaldo (con él serían ~4 % menos años) y la vivienda que la gente construye por su cuenta.
+      </p>
+      <p>
+        <strong>Aunque no gastaras nada</strong> (sin comer, sin renta, sin transporte): {fmt(cuentas(l).completo, 1)} años.
       </p>
       <p>
         <strong>Con dos sueldos mínimos en casa:</strong> ~{fmt(NAC.anios30 / 2)} años en todo México. Casi el doble de los {ALCANZABLE} que el gobierno considera alcanzables.
