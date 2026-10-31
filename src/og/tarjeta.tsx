@@ -96,8 +96,8 @@ function Titulo({ d, tam }: { d: ReturnType<typeof datos>; tam: number }) {
   return (
     <div style={{ display: "flex", flexWrap: "wrap", fontFamily: "Bricolage", fontSize: tam, lineHeight: 1.02, letterSpacing: -tam * 0.03 }}>
       <span>Con el mínimo,&nbsp;</span>
-      <span style={{ color: TABIQUE_OSCURO }}>{d.tope ? `más de ${TOPE_ANIOS}` : d.cifra} años</span>
-      <span>&nbsp;para juntar una casa.</span>
+      <span style={{ color: TABIQUE_OSCURO }}>{d.tope ? `más de ${TOPE_ANIOS}` : d.cifra} años&nbsp;</span>
+      <span>para juntar una casa.</span>
     </div>
   );
 }
