@@ -155,6 +155,35 @@ export function cuentas(l: Lugar, diario = l.salario) {
   };
 }
 
+/**
+ * Municipios de 20 años o menos: no se comparan con el plazo oficial, porque la barra corta diría "aquí sí se puede".
+ * Se comparan en pesos y la barra larga siempre es la del problema: la estimación baja contra la casa barata del estado,
+ * o el precio firme contra el crédito más el ahorro del INFONAVIT. Lo usan la tarjeta y el texto para compartir.
+ */
+export function bajoPlazo(l: Lugar) {
+  const c = cuentas(l);
+  const e = l.estado;
+  if (l.tope || !e || l.tipo !== "municipio" || Math.round(c.ahorrando) > ALCANZABLE) return null;
+  if (l.precio < e.p25) {
+    const barata = `La casa barata ${deLugar(e.nombre)} cuesta ${dinero(e.p25)}.`;
+    return {
+      corta: { etiqueta: "Lo que estimamos aquí", valor: l.precio, txt: dinero(l.precio) },
+      larga: { etiqueta: `Una casa barata ${deLugar(e.nombre)}`, valor: e.p25, txt: dinero(e.p25) },
+      remate: `Estimación baja: ${barata[0].toLowerCase()}${barata.slice(1)}`,
+      compartir: `, según una estimación baja. ${barata}`,
+      fuentes: "SNIIV, SHF, CONASAMI",
+    };
+  }
+  const falta = `aunque sumes el crédito y tu ahorro del INFONAVIT, te faltan ${dinero(c.faltaInfo)}.`;
+  return {
+    corta: { etiqueta: "Crédito + tu ahorro del INFONAVIT", valor: PODER_INFO, txt: PODER_TXT() },
+    larga: { etiqueta: "La casa típica aquí", valor: l.precio, txt: dinero(l.precio) },
+    remate: `A${falta.slice(1)}`,
+    compartir: `. Y ${falta}`,
+    fuentes: "INFONAVIT según prensa · SNIIV, CONASAMI",
+  };
+}
+
 /* ---------- Direcciones: /jalisco y /jalisco/guadalajara ---------- */
 
 /** Igual que slug() en scripts/build_municipios.py. */

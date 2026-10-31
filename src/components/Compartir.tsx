@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { registrar } from "@/lib/analytics";
-import { ALCANZABLE, TOPE_ANIOS, aniosTxt, cuentas, nombreCompleto, rutaDe, sinPrestado, slug, type Lugar } from "@/lib/datos";
+import { ALCANZABLE, TOPE_ANIOS, aniosTxt, bajoPlazo, cuentas, nombreCompleto, rutaDe, sinPrestado, slug, type Lugar } from "@/lib/datos";
 
 /**
  * Comparte la página del lugar (con su tarjeta para redes), siempre con el salario mínimo: el texto y la imagen se arman
@@ -20,9 +20,10 @@ export default function Compartir({ l: elegido, propio }: { l: Lugar; propio: bo
   const ruta = rutaDe(l);
   const c = cuentas(l); // con el mínimo del lugar, a propósito
   const anios = l.tope ? `más de ${TOPE_ANIOS}` : aniosTxt(c.ahorrando);
-  // Provisional: en los municipios de 20 años o menos no se compara con el plazo oficial (su regla espera el ok del usuario).
-  const plazo = l.tope || Math.round(c.ahorrando) > ALCANZABLE ? ` El gobierno dice que lo alcanzable son ${ALCANZABLE}.` : "";
-  const texto = `Con el salario mínimo, juntar para una casa en ${nombreCompleto(l)} toma ${anios} años.${plazo}`;
+  // En 20 años o menos no se cita el plazo oficial: se dice lo que cuesta de verdad (ver bajoPlazo).
+  const bajo = bajoPlazo(l);
+  const cierre = bajo ? bajo.compartir : `. El gobierno dice que lo alcanzable son ${ALCANZABLE}.`;
+  const texto = `Con el salario mínimo, juntar para una casa en ${nombreCompleto(l)} toma ${anios} años${cierre}`;
   const url = () => `${window.location.origin}${ruta}`;
   const lugar = ruta === "/" ? "mexico" : ruta.slice(1);
 
