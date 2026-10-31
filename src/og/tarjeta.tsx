@@ -6,7 +6,7 @@
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { COLOR_TRAMO, H, W, barda } from "@/lib/barda";
-import { AHORRO_PCT, ALCANZABLE, D, EDAD_INICIO, TOPE_ANIOS, aniosTxt, cuentas, nombreCompleto, type Lugar } from "@/lib/datos";
+import { AHORRO_PCT, ALCANZABLE, D, EDAD_INICIO, TOPE_ANIOS, aniosTxt, bajoPlazo, cuentas, nombreCompleto, type Lugar } from "@/lib/datos";
 import { SITIO } from "@/lib/sitio";
 
 export const OG = { width: 1200, height: 630 };
@@ -43,6 +43,8 @@ function datos(l: Lugar) {
     anios: l.tope ? TOPE_ANIOS : c.ahorrando,
     tope: !!l.tope,
     terminas: c.terminas,
+    /** 20 años o menos: barras en pesos en lugar del plazo oficial. */
+    bajo: bajoPlazo(l),
     /** Municipio sin dato propio: la tarjeta lleva el nombre del estado y lo dice. */
     nota: l.prestado ? `Cifra de ${l.nombre}: ${l.prestado.municipio} no tiene dato propio.` : null,
   };
@@ -80,7 +82,7 @@ function Marca({ tam }: { tam: number }) {
 /** "Casi 5 veces el plazo oficial.": la cifra del lugar contra los 20 años que CONAVI llama alcanzables. */
 export function remate(n: number, tope: boolean) {
   if (tope) return `Más de ${Math.floor(TOPE_ANIOS / ALCANZABLE)} veces el plazo oficial.`;
-  // Provisional: en los municipios de 20 años o menos no se compara con el plazo oficial (su regla espera el ok del usuario).
+  // En 20 años o menos no se compara con el plazo oficial: esos lugares van en pesos (bajoPlazo).
   if (Math.round(n) <= ALCANZABLE) return null;
   const r = n / ALCANZABLE;
   if (r < 1.7) return Math.round(n - ALCANZABLE) === 1 ? "1 año más que el plazo oficial." : `${Math.round(n - ALCANZABLE)} años más que el plazo oficial.`;
@@ -100,13 +102,28 @@ function Titulo({ d, tam }: { d: ReturnType<typeof datos>; tam: number }) {
   );
 }
 
+/** Las dos barras, la corta en neutro y la larga en tabique: contra el plazo oficial, o en pesos si son 20 años o menos. */
+function barras(d: ReturnType<typeof datos>) {
+  if (d.bajo) {
+    const { corta, larga } = d.bajo;
+    return { corta: { ...corta, n: corta.valor }, larga: { ...larga, n: larga.valor }, remate: d.bajo.remate, fuentes: d.bajo.fuentes };
+  }
+  return {
+    corta: { etiqueta: "Lo que el gobierno llama alcanzable", txt: `${ALCANZABLE} años`, n: ALCANZABLE },
+    larga: { etiqueta: d.lugar, txt: d.cifra, n: d.anios },
+    remate: remate(d.anios, d.tope),
+    fuentes: "SHF, CONASAMI, CONAVI",
+  };
+}
+
 /** Open Graph, 1200×630 (opción A): el lugar contra lo que el gobierno llama alcanzable, en dos barras a la misma escala. */
 export function TarjetaOG({ l }: { l: Lugar }) {
   const d = datos(l);
-  // Las dos barras a la misma escala, contra la mayor de las dos cifras.
-  const escala = 760 / Math.max(d.anios, ALCANZABLE);
-  const corto = Math.round(ALCANZABLE * escala);
-  const largo = Math.max(Math.round(d.anios * escala), 8);
+  const b = barras(d);
+  // Las dos barras a la misma escala, contra la mayor de las dos cifras; más cortas si la cifra en pesos es larga.
+  const escala = (b.larga.txt.length > 9 ? 620 : 760) / Math.max(b.larga.n, b.corta.n);
+  const corto = Math.round(b.corta.n * escala);
+  const largo = Math.max(Math.round(b.larga.n * escala), 8);
   return (
     <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", background: CAL, fontFamily: "Instrument", color: CARBON }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: OBRA, borderBottom: `4px solid ${CARBON}`, padding: "20px 56px" }}>
@@ -116,27 +133,27 @@ export function TarjetaOG({ l }: { l: Lugar }) {
       <div style={{ display: "flex", flexDirection: "column", flex: 1, padding: "30px 56px 0" }}>
         <Titulo d={d} tam={60} />
         <div style={{ display: "flex", flexDirection: "column", gap: 14, marginTop: 28 }}>
-          {remate(d.anios, d.tope) && (<div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-            <span style={{ fontSize: 22, color: TINTA_2 }}>Lo que el gobierno llama alcanzable</span>
+          <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+            <span style={{ fontSize: 22, color: TINTA_2 }}>{b.corta.etiqueta}</span>
             <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
               <div style={{ display: "flex", width: corto, height: 34, background: TINTA_2, borderRadius: 4 }} />
-              <span style={{ fontFamily: "Bricolage", fontSize: 34 }}>{ALCANZABLE} años</span>
+              <span style={{ fontFamily: "Bricolage", fontSize: 34 }}>{b.corta.txt}</span>
             </div>
-          </div>)}
+          </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-            <span style={{ fontSize: 22, color: TINTA_2 }}>{d.lugar}</span>
+            <span style={{ fontSize: 22, color: TINTA_2 }}>{b.larga.etiqueta}</span>
             <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
               <div style={{ display: "flex", width: largo, height: 64, background: TABIQUE, borderRadius: 4 }} />
-              <span style={{ fontFamily: "Bricolage", fontSize: 64, letterSpacing: -2 }}>{d.cifra}</span>
+              <span style={{ fontFamily: "Bricolage", fontSize: 64, letterSpacing: -2 }}>{b.larga.txt}</span>
             </div>
           </div>
         </div>
-        {remate(d.anios, d.tope) && <div style={{ display: "flex", marginTop: 20, fontSize: 30, fontWeight: 700 }}>{remate(d.anios, d.tope)}</div>}
+        {b.remate && <div style={{ display: "flex", marginTop: 20, fontSize: d.bajo ? 26 : 30, fontWeight: 700 }}>{b.remate}</div>}
       </div>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: 24, padding: "12px 56px 22px", fontSize: 20, color: TINTA_2 }}>
         <div style={{ display: "flex", flexDirection: "column" }}>
           {d.nota && <span style={{ fontWeight: 700, color: CARBON }}>{d.nota}</span>}
-          <span>Ahorrando el {AHORRO_PCT} % del salario mínimo · SHF, CONASAMI, CONAVI · {D.anio}</span>
+          <span>Ahorrando el {AHORRO_PCT} % del salario mínimo · {b.fuentes} · {D.anio}</span>
         </div>
         <span style={{ fontWeight: 700, color: CARBON, fontSize: 22 }}>{dominio()}</span>
       </div>
@@ -147,9 +164,10 @@ export function TarjetaOG({ l }: { l: Lugar }) {
 /** Historia, 1080×1920 (opción A arriba, la barda de vida abajo), con margen arriba y abajo (Instagram tapa ~230 px de cada lado). */
 export function TarjetaHistoria({ l }: { l: Lugar }) {
   const d = datos(l);
-  const escala = 300 / Math.max(d.anios, ALCANZABLE);
-  const bajo = Math.round(ALCANZABLE * escala);
-  const alto = Math.max(Math.round(d.anios * escala), 8);
+  const b = barras(d);
+  const escala = 300 / Math.max(b.larga.n, b.corta.n);
+  const bajo = Math.round(b.corta.n * escala);
+  const alto = Math.max(Math.round(b.larga.n * escala), 8);
   const barra = (h: number, color: string, etiqueta: string, cifra: string, grande: boolean) => (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-end", width: 300 }}>
       <span style={{ fontFamily: "Bricolage", fontSize: grande ? 72 : 44, letterSpacing: -2 }}>{cifra}</span>
@@ -166,15 +184,20 @@ export function TarjetaHistoria({ l }: { l: Lugar }) {
         <Titulo d={d} tam={76} />
       </div>
       <div style={{ display: "flex", justifyContent: "center", alignItems: "flex-end", gap: 60, marginTop: 30 }}>
-        {remate(d.anios, d.tope) && barra(bajo, TINTA_2, "Lo que el gobierno llama alcanzable", `${ALCANZABLE} años`, false)}
-        {barra(alto, TABIQUE, d.lugar, `${d.cifra} años`, true)}
+        {barra(bajo, TINTA_2, b.corta.etiqueta, d.bajo ? b.corta.txt : `${ALCANZABLE} años`, false)}
+        {barra(alto, TABIQUE, b.larga.etiqueta, d.bajo ? b.larga.txt : `${d.cifra} años`, true)}
       </div>
-      {remate(d.anios, d.tope) && <div style={{ display: "flex", marginTop: 30, fontSize: 44, fontWeight: 700 }}>{remate(d.anios, d.tope)}</div>}
+      {/* En 20 años o menos la barda casi entera es "lo que queda" y se ve tranquila: su lugar lo ocupa el remate en grande. */}
+      {b.remate && !d.bajo && <div style={{ display: "flex", marginTop: 30, fontSize: 44, fontWeight: 700 }}>{b.remate}</div>}
       {d.nota && <div style={{ display: "flex", marginTop: 12, fontSize: 30, fontWeight: 700 }}>{d.nota}</div>}
-      <div style={{ display: "flex", flexDirection: "column", flex: 1, justifyContent: "center", alignItems: "center", marginTop: 20 }}>
-        <span style={{ display: "flex", alignSelf: "flex-start", fontSize: 28, color: TINTA_2, marginBottom: 12 }}>Tu vida en tabiques, uno por año. Empiezas a los {EDAD_INICIO}.</span>
-        <Barda l={l} ancho={360} />
-      </div>
+      {d.bajo ? (
+        <div style={{ display: "flex", flex: 1, alignItems: "center", marginTop: 20, fontFamily: "Bricolage", fontSize: 64, lineHeight: 1.05, letterSpacing: -1.6 }}>{b.remate}</div>
+      ) : (
+        <div style={{ display: "flex", flexDirection: "column", flex: 1, justifyContent: "center", alignItems: "center", marginTop: 20 }}>
+          <span style={{ display: "flex", alignSelf: "flex-start", fontSize: 28, color: TINTA_2, marginBottom: 12 }}>Tu vida en tabiques, uno por año. Empiezas a los {EDAD_INICIO}.</span>
+          <Barda l={l} ancho={360} />
+        </div>
+      )}
       <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 14 }}>
         <div style={{ display: "flex", fontFamily: "Bricolage", fontSize: 60, letterSpacing: -1.6 }}>¿Y dónde vives tú?</div>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
