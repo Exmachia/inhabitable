@@ -145,7 +145,7 @@ export function TarjetaHistoria({ l }: { l: Lugar }) {
   const noAlcanza = !d.bajo && (d.tope || d.terminas > ev);
   const barra = (h: number, color: string, etiqueta: string, cifra: string, grande: boolean, zigzag: boolean) => (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-end", width: 340 }}>
-      <span style={{ fontFamily: "Bricolage", fontSize: grande ? 96 : 56, letterSpacing: -2, lineHeight: 1 }}>{cifra}</span>
+      <span style={{ fontFamily: "Bricolage", fontSize: grande ? (cifra.length > 7 ? 76 : 96) : 56, letterSpacing: -2, lineHeight: 1, whiteSpace: "nowrap" }}>{cifra}</span>
       {zigzag && (
         <svg width={260} height={14} viewBox="0 0 260 14" style={{ marginTop: 10 }}>
           <path d="M0 14L0 0L21.7 14L43.3 0L65 14L86.7 0L108.3 14L130 0L151.7 14L173.3 0L195 14L216.7 0L238.3 14L260 0L260 14Z" fill={color} />
