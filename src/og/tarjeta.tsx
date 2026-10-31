@@ -138,7 +138,7 @@ export function TarjetaOG({ l }: { l: Lugar }) {
 export function TarjetaHistoria({ l }: { l: Lugar }) {
   const d = datos(l);
   const b = barras(d);
-  const escala = 640 / Math.max(b.larga.n, b.corta.n);
+  const escala = 400 / Math.max(b.larga.n, b.corta.n);
   const bajo = Math.max(Math.round(b.corta.n * escala), 8);
   const alto = Math.max(Math.round(b.larga.n * escala), 8);
   const ev = Math.round(l.ev);
@@ -157,25 +157,25 @@ export function TarjetaHistoria({ l }: { l: Lugar }) {
   );
   return (
     <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", background: CAL, fontFamily: "Instrument", color: CARBON, padding: "250px 90px 260px" }}>
-      <div style={{ display: "flex", alignSelf: "flex-start", background: OBRA, border: `4px solid ${CARBON}`, borderRadius: 28, padding: "12px 26px", fontFamily: "Bricolage", fontSize: d.lugar.length > 28 ? 40 : 48, letterSpacing: -1.2 }}>
+      <div style={{ display: "flex", flexShrink: 0, alignSelf: "flex-start", background: OBRA, border: `4px solid ${CARBON}`, borderRadius: 28, padding: "12px 26px", fontFamily: "Bricolage", fontSize: d.lugar.length > 28 ? 40 : 48, letterSpacing: -1.2 }}>
         {d.lugar}
       </div>
-      <div style={{ display: "flex", marginTop: 40 }}>
-        <Titulo d={d} tam={84} />
+      <div style={{ display: "flex", flexShrink: 0, marginTop: 30 }}>
+        <Titulo d={d} tam={76} />
       </div>
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "flex-end", gap: 80, marginTop: 50 }}>
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "flex-end", gap: 80, marginTop: 36, flexShrink: 0 }}>
         {barra(bajo, TINTA_2, b.corta.etiqueta, d.bajo ? b.corta.txt : `${ALCANZABLE} años`, false, false)}
         {barra(alto, TABIQUE, b.larga.etiqueta, d.bajo ? b.larga.txt : d.tope ? `${TOPE_ANIOS}+` : `${d.cifra} años`, true, d.tope)}
       </div>
-      {b.remate && <div style={{ display: "flex", marginTop: 56, fontSize: 52, lineHeight: 1.1, fontWeight: 700 }}>{b.remate}</div>}
+      {b.remate && <div style={{ display: "flex", flexShrink: 0, marginTop: 36, fontSize: 52, lineHeight: 1.1, fontWeight: 700 }}>{b.remate}</div>}
       {noAlcanza && (
-        <div style={{ display: "flex", marginTop: 16, fontSize: 36, lineHeight: 1.2, color: TINTA_2 }}>
+        <div style={{ display: "flex", flexShrink: 0, marginTop: 16, fontSize: 36, lineHeight: 1.2, color: TINTA_2 }}>
           {d.tope ? `Terminarías después de los ${EDAD_INICIO + TOPE_ANIOS}.` : `Terminarías a los ${d.terminas}.`} Aquí se vive en promedio {ev}.
         </div>
       )}
       {d.nota && <div style={{ display: "flex", marginTop: 12, fontSize: 30, fontWeight: 700 }}>{d.nota}</div>}
       <div style={{ display: "flex", flex: 1 }} />
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 14 }}>
+      <div style={{ display: "flex", flexShrink: 0, flexDirection: "column", alignItems: "flex-start", gap: 14 }}>
         <div style={{ display: "flex", fontFamily: "Bricolage", fontSize: 64, letterSpacing: -1.6 }}>¿Y dónde vives tú?</div>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
           <Marca tam={40} />
