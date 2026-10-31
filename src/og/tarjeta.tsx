@@ -11,6 +11,8 @@ import { SITIO } from "@/lib/sitio";
 
 export const OG = { width: 1200, height: 630 };
 export const HISTORIA = { width: 1080, height: 1920 };
+/** Las tarjetas solo cambian cuando cambian los datos: que Vercel las guarde un día en vez de dibujarlas en cada visita. */
+export const CACHE = { "Cache-Control": "public, max-age=86400, immutable" };
 
 const CAL = "#f4f0e8";
 const CARBON = "#1c1a17";
