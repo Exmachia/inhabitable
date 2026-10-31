@@ -1,0 +1,322 @@
+{
+"01": {
+"nombre": "Aguascalientes",
+"slug": "aguascalientes",
+"b": [
+-102.874,
+21.622,
+-101.835,
+22.459
+]
+},
+"02": {
+"nombre": "Baja California",
+"slug": "baja-california",
+"b": [
+-117.3,
+28,
+-112.297,
+32.718
+]
+},
+"03": {
+"nombre": "Baja California Sur",
+"slug": "baja-california-sur",
+"b": [
+-115.22,
+22.872,
+-109.413,
+28
+]
+},
+"04": {
+"nombre": "Campeche",
+"slug": "campeche",
+"b": [
+-92.469,
+17.813,
+-89.121,
+20.849
+]
+},
+"05": {
+"nombre": "Coahuila",
+"slug": "coahuila",
+"b": [
+-103.96,
+24.543,
+-99.843,
+29.88
+]
+},
+"06": {
+"nombre": "Colima",
+"slug": "colima",
+"b": [
+-104.69,
+18.684,
+-103.487,
+19.512
+]
+},
+"07": {
+"nombre": "Chiapas",
+"slug": "chiapas",
+"b": [
+-94.139,
+14.532,
+-90.37,
+17.984
+]
+},
+"08": {
+"nombre": "Chihuahua",
+"slug": "chihuahua",
+"b": [
+-109.075,
+25.559,
+-103.307,
+31.785
+]
+},
+"09": {
+"nombre": "Ciudad de México",
+"slug": "ciudad-de-mexico",
+"b": [
+-99.365,
+19.048,
+-98.941,
+19.593
+]
+},
+"10": {
+"nombre": "Durango",
+"slug": "durango",
+"b": [
+-107.21,
+22.346,
+-102.472,
+26.845
+]
+},
+"11": {
+"nombre": "Guanajuato",
+"slug": "guanajuato",
+"b": [
+-102.097,
+19.913,
+-99.671,
+21.84
+]
+},
+"12": {
+"nombre": "Guerrero",
+"slug": "guerrero",
+"b": [
+-102.184,
+16.316,
+-98.007,
+18.887
+]
+},
+"13": {
+"nombre": "Hidalgo",
+"slug": "hidalgo",
+"b": [
+-99.859,
+19.598,
+-97.985,
+21.398
+]
+},
+"14": {
+"nombre": "Jalisco",
+"slug": "jalisco",
+"b": [
+-105.695,
+18.926,
+-101.51,
+22.75
+]
+},
+"15": {
+"nombre": "Estado de México",
+"slug": "estado-de-mexico",
+"b": [
+-100.613,
+18.367,
+-98.597,
+20.286
+]
+},
+"16": {
+"nombre": "Michoacán",
+"slug": "michoacan",
+"b": [
+-103.738,
+17.915,
+-100.063,
+20.395
+]
+},
+"17": {
+"nombre": "Morelos",
+"slug": "morelos",
+"b": [
+-99.495,
+18.332,
+-98.633,
+19.131
+]
+},
+"18": {
+"nombre": "Nayarit",
+"slug": "nayarit",
+"b": [
+-106.493,
+20.603,
+-103.721,
+23.084
+]
+},
+"19": {
+"nombre": "Nuevo León",
+"slug": "nuevo-leon",
+"b": [
+-101.207,
+23.163,
+-98.421,
+27.799
+]
+},
+"20": {
+"nombre": "Oaxaca",
+"slug": "oaxaca",
+"b": [
+-98.552,
+15.658,
+-93.868,
+18.669
+]
+},
+"21": {
+"nombre": "Puebla",
+"slug": "puebla",
+"b": [
+-99.07,
+17.861,
+-96.725,
+20.84
+]
+},
+"22": {
+"nombre": "Querétaro",
+"slug": "queretaro",
+"b": [
+-100.597,
+20.016,
+-99.043,
+21.67
+]
+},
+"23": {
+"nombre": "Quintana Roo",
+"slug": "quintana-roo",
+"b": [
+-89.296,
+17.894,
+-86.712,
+21.605
+]
+},
+"24": {
+"nombre": "San Luis Potosí",
+"slug": "san-luis-potosi",
+"b": [
+-102.296,
+21.16,
+-98.326,
+24.491
+]
+},
+"25": {
+"nombre": "Sinaloa",
+"slug": "sinaloa",
+"b": [
+-109.445,
+22.467,
+-105.392,
+27.042
+]
+},
+"26": {
+"nombre": "Sonora",
+"slug": "sonora",
+"b": [
+-115.053,
+26.297,
+-108.424,
+32.494
+]
+},
+"27": {
+"nombre": "Tabasco",
+"slug": "tabasco",
+"b": [
+-94.13,
+17.251,
+-90.987,
+18.651
+]
+},
+"28": {
+"nombre": "Tamaulipas",
+"slug": "tamaulipas",
+"b": [
+-100.145,
+22.207,
+-97.144,
+27.679
+]
+},
+"29": {
+"nombre": "Tlaxcala",
+"slug": "tlaxcala",
+"b": [
+-98.709,
+19.105,
+-97.626,
+19.729
+]
+},
+"30": {
+"nombre": "Veracruz",
+"slug": "veracruz",
+"b": [
+-98.681,
+17.137,
+-93.608,
+22.471
+]
+},
+"31": {
+"nombre": "Yucatán",
+"slug": "yucatan",
+"b": [
+-90.407,
+19.551,
+-87.533,
+21.625
+]
+},
+"32": {
+"nombre": "Zacatecas",
+"slug": "zacatecas",
+"b": [
+-104.353,
+21.042,
+-100.743,
+25.125
+]
+}
+}

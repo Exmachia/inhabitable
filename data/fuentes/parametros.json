@@ -1,0 +1,89 @@
+{
+  "_nota": "Cifras tomadas a mano de publicaciones oficiales; cada una con su fuente y fecha. Actualizar con cada publicación.",
+  "precios": {
+    "periodo": "enero–junio 2026",
+    "publicado": "2026-08-10",
+    "fuente": "SHF, Índice SHF de Precios de la Vivienda en México, 2.º trimestre de 2026 (boletín 05/2026), Tabla 2",
+    "url": "https://www.gob.mx/shf/prensa/indice-shf-de-precios-de-la-vivienda-en-mexico-segundo-trimestre-de-2026-432219"
+  },
+  "salario": {
+    "anio": 2026,
+    "general": 315.04,
+    "frontera": 440.87,
+    "fuente": "CONASAMI, salarios mínimos vigentes desde el 1 de enero de 2026 (serie SL11298 del SIE de Banxico)"
+  },
+  "credito": {
+    "tasa": 11.42,
+    "periodo": "2.º trimestre de 2026",
+    "fuente": "Banco de México, tasa hipotecaria promedio, citada en el boletín 05/2026 de la SHF",
+    "enganche": 0.1,
+    "anios": 20,
+    "_nota": "Tasa de los bancos: ya no es escenario (quien gana el mínimo no saca crédito en un banco). Solo se menciona en el «?» de «Con crédito»."
+  },
+  "enoe": {
+    "periodo": "2.º trimestre de 2026",
+    "publicado": "2026-08-25",
+    "pctHastaUnSM": 46.5,
+    "personasHastaUnSM": 27900184,
+    "ocupados": 60040094,
+    "pctNoEspecificado": 8.7,
+    "fuente": "INEGI, Encuesta Nacional de Ocupación y Empleo (ENOE), boletín 503/26",
+    "url": "https://www.inegi.org.mx/contenidos/saladeprensa/boletines/2026/enoe/enoe2026_08.pdf",
+    "pctNoRecibe": 4.5,
+    "personasNoRecibe": 2676153,
+    "pctMasDeUnSM": 40.4
+  },
+  "frontera": {
+    "_nota": "Zona Libre de la Frontera Norte: todo Baja California; en los otros cinco estados, solo los municipios fronterizos.",
+    "toda": [
+      "02"
+    ],
+    "parte": [
+      "05",
+      "08",
+      "19",
+      "26",
+      "28"
+    ]
+  },
+  "infonavit": {
+    "_nota": "NO CONFIRMADO CON PUBLICACIÓN DEL INFONAVIT. El portal del instituto (portalmx.infonavit.org.mx) no respondió (30 oct 2026) y el monto exacto solo sale en «Mi Cuenta Infonavit» con datos personales. Ambas cifras vienen de prensa que cita al instituto o a su simulador; en el sitio se marcan como tal.",
+    "monto": 602692,
+    "montoFuente": "UnoTV, 10 feb 2026, con el simulador de Crédito Infonavit para un sueldo de $9,582.47 al mes",
+    "montoUrl": "https://www.unotv.com/negocios/infonavit-2026-asi-puedes-saber-cuanto-dinero-te-prestan/",
+    "tasa": 3.69,
+    "tasaFuente": "Expansión, 6 oct 2026: tasas del crédito tradicional de 3.69 % a 10.45 % según el salario (la más baja para los salarios más bajos)",
+    "tasaUrl": "https://expansion.mx/finanzas-personales/2026/10/06/tasa-baja-infonavit-unica-condicion-acceder-ella",
+    "anios": 30,
+    "anioSalario": 2026,
+    "verificado": "2026-10-30",
+    "prensa": true,
+    "subcuenta": 57000,
+    "subcuentaNota": "Ahorro de la subcuenta de vivienda (5 % del sueldo que pone el patrón) tras 15 años cotizando con el mínimo, sin huecos y con rendimiento de 7 %: techo realista, del lado generoso. El INFONAVIT lo suma al crédito como «capacidad de compra». Cálculo propio con salarios mínimos históricos; método en data/COMO-ACTUALIZAR.md"
+  },
+  "informalidad": {
+    "pct": 55.2,
+    "periodo": "abril de 2026",
+    "fuente": "INEGI, ENOE, vía prensa (Grupo Animal)",
+    "url": "https://grupoanimal.mx/economia/fuerza-laboral-62-1-millones-abril-2026",
+    "prensa": true
+  },
+  "enoeTendencia": {
+    "antes": {
+      "pct": 40.1,
+      "periodo": "1.er trimestre de 2025"
+    },
+    "ahora": {
+      "pct": 46.9,
+      "periodo": "1.er trimestre de 2026"
+    },
+    "fuente": "INEGI, ENOE, cifras citadas por prensa",
+    "prensa": true
+  },
+  "conavi": {
+    "anios": 20,
+    "pct": 30,
+    "fuente": "CONAVI, Programa Institucional 2025–2030 (DOF): pagar la vivienda promedio con el 30 % del ingreso en 20 años",
+    "url": "https://sidof.segob.gob.mx/notas/docFuente/5770097"
+  }
+}
