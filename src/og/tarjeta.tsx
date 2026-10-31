@@ -152,7 +152,7 @@ export function TarjetaHistoria({ l }: { l: Lugar }) {
         </svg>
       )}
       <div style={{ display: "flex", width: 260, height: zigzag ? h - 14 : h, background: color, borderRadius: zigzag ? "0 0 6px 6px" : 6, marginTop: zigzag ? 0 : 10 }} />
-      <span style={{ display: "flex", textAlign: "center", marginTop: 14, fontSize: 30, lineHeight: 1.15, color: TINTA_2, maxWidth: 340 }}>{etiqueta}</span>
+      <span style={{ display: "flex", justifyContent: "center", alignItems: "flex-start", textAlign: "center", marginTop: 14, height: 70, fontSize: 30, lineHeight: 1.15, color: TINTA_2, width: 340 }}>{etiqueta}</span>
     </div>
   );
   return (
@@ -177,9 +177,9 @@ export function TarjetaHistoria({ l }: { l: Lugar }) {
       <div style={{ display: "flex", flex: 1 }} />
       <div style={{ display: "flex", flexShrink: 0, flexDirection: "column", alignItems: "flex-start", gap: 14 }}>
         <div style={{ display: "flex", fontFamily: "Bricolage", fontSize: 64, letterSpacing: -1.6 }}>¿Y dónde vives tú?</div>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 32, width: "100%" }}>
           <Marca tam={40} />
-          <span style={{ fontSize: 36, fontWeight: 700 }}>{dominio()}</span>
+          <span style={{ fontSize: dominio().length > 24 ? 26 : 36, fontWeight: 700, whiteSpace: "nowrap" }}>{dominio()}</span>
         </div>
       </div>
     </div>
