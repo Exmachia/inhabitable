@@ -23,13 +23,13 @@ export async function fuentes() {
   const dir = join(process.cwd(), "src/og/fuentes");
   const [display, sans, sansBold] = await Promise.all([
     readFile(join(dir, "Bricolage-ExtraBold.ttf")),
-    readFile(join(dir, "InstrumentSans-Medium.ttf")),
-    readFile(join(dir, "InstrumentSans-Bold.ttf")),
+    readFile(join(dir, "Outfit-Medium.ttf")),
+    readFile(join(dir, "Outfit-Bold.ttf")),
   ]);
   return [
     { name: "Bricolage", data: display, weight: 800 as const, style: "normal" as const },
-    { name: "Instrument", data: sans, weight: 500 as const, style: "normal" as const },
-    { name: "Instrument", data: sansBold, weight: 700 as const, style: "normal" as const },
+    { name: "Outfit", data: sans, weight: 500 as const, style: "normal" as const },
+    { name: "Outfit", data: sansBold, weight: 700 as const, style: "normal" as const },
   ];
 }
 
@@ -93,9 +93,14 @@ export function remate(n: number, tope: boolean) {
 function Titulo({ d, tam }: { d: ReturnType<typeof datos>; tam: number }) {
   return (
     <div style={{ display: "flex", flexWrap: "wrap", fontFamily: "Bricolage", fontSize: tam, lineHeight: 1.02, letterSpacing: -tam * 0.03 }}>
-      <span>Con el mínimo,&nbsp;</span>
-      <span style={{ color: TABIQUE_OSCURO }}>{d.tope ? `más de ${TOPE_ANIOS}` : d.cifra} años</span>
-      <span>&nbsp;para juntar una casa.</span>
+      {/* Palabra por palabra: así ningún renglón empieza con espacio al partir el título. */}
+      {[
+        ...["Con", "el", "mínimo,"].map((t) => ({ t, color: undefined as string | undefined })),
+        ...`${d.tope ? `más de ${TOPE_ANIOS}` : d.cifra} años`.split(" ").map((t) => ({ t, color: TABIQUE_OSCURO })),
+        ...["para", "juntar", "una", "casa."].map((t) => ({ t, color: undefined })),
+      ].map((p, i) => (
+        <span key={i} style={{ color: p.color, marginRight: tam * 0.24 }}>{p.t}</span>
+      ))}
     </div>
   );
 }
@@ -108,9 +113,9 @@ export function TarjetaOG({ l }: { l: Lugar }) {
   const corto = Math.round(ALCANZABLE * escala);
   const largo = Math.max(Math.round(d.anios * escala), 8);
   return (
-    <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", background: CAL, fontFamily: "Instrument", color: CARBON }}>
+    <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", background: CAL, fontFamily: "Outfit", color: CARBON }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: OBRA, borderBottom: `4px solid ${CARBON}`, padding: "20px 56px" }}>
-        <div style={{ display: "flex", fontFamily: "Bricolage", fontSize: d.lugar.length > 30 ? 34 : 42, letterSpacing: -1 }}>{d.lugar}</div>
+        <div style={{ display: "flex", fontFamily: "Bricolage", fontSize: d.lugar.length > 30 ? 34 : 42, letterSpacing: -2 }}>{d.lugar}</div>
         <Marca tam={28} />
       </div>
       <div style={{ display: "flex", flexDirection: "column", flex: 1, padding: "30px 56px 0" }}>
@@ -158,7 +163,7 @@ export function TarjetaHistoria({ l }: { l: Lugar }) {
     </div>
   );
   return (
-    <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", background: CAL, fontFamily: "Instrument", color: CARBON, padding: "250px 90px 260px" }}>
+    <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", background: CAL, fontFamily: "Outfit", color: CARBON, padding: "250px 90px 260px" }}>
       <div style={{ display: "flex", alignSelf: "flex-start", background: OBRA, border: `4px solid ${CARBON}`, borderRadius: 28, padding: "12px 26px", fontFamily: "Bricolage", fontSize: d.lugar.length > 28 ? 40 : 48, letterSpacing: -1.2 }}>
         {d.lugar}
       </div>

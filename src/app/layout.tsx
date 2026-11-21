@@ -1,12 +1,12 @@
 import type { Metadata, Viewport } from "next";
-import { Bricolage_Grotesque, Instrument_Sans } from "next/font/google";
+import { Bricolage_Grotesque, Outfit } from "next/font/google";
 import Script from "next/script";
 import { SITIO, TITULO } from "@/lib/sitio";
 import { NAC, PEOR, anios } from "@/lib/datos";
 import "maplibre-gl/dist/maplibre-gl.css";
 import "./globals.css";
 
-// Titulares y cifras: grotesca con carácter (tamaño óptico), lejos del tono de periódico.
+// Titulares y cifras: grotesca con carácter (tamaño óptico).
 const display = Bricolage_Grotesque({
   variable: "--font-bricolage",
   axes: ["opsz"],
@@ -14,9 +14,9 @@ const display = Bricolage_Grotesque({
   display: "swap",
 });
 
-// Texto e interfaz: sans clara y neutra, muy legible en celular.
-const sans = Instrument_Sans({
-  variable: "--font-instrument",
+// Texto e interfaz: Outfit, geométrica y clara.
+const outfit = Outfit({
+  variable: "--font-outfit",
   subsets: ["latin"],
   display: "swap",
 });
@@ -48,7 +48,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="es-MX" data-scroll-behavior="smooth" className={`${display.variable} ${sans.variable}`}>
+    <html lang="es-MX" data-scroll-behavior="smooth" className={`${display.variable} ${outfit.variable}`}>
       <body className="min-h-dvh">
         {children}
         {/* Umami (sin cookies), solo si hay sitio configurado. Los eventos nunca llevan el salario: ver src/lib/analytics.ts. */}

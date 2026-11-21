@@ -101,7 +101,7 @@ El paso a paso de cada actualización (enero: salario nuevo; agosto: índice SHF
 
 - **Metáfora:** cada año de ahorro es un tabique; la barda de tu resultado se levanta de abajo hacia arriba.
 - **Materiales de obra:** cal `#f4f0e8`, cemento `#ebe5d9`, tabique `#c2502b`, carbón `#1c1a17` y amarillo de obra `#f0b429`.
-- **Tipografía:** Bricolage Grotesque (titulares y cifras) e Instrument Sans (texto).
+- **Tipografía:** Bricolage Grotesque (titulares y cifras) y Outfit (texto).
 - **Escala del mapa** (años ahorrando el 30 %), validada para daltonismo: `#ecd9b4` → `#e19a5e` → `#c2502b` → `#7a2614`.
 - Mapa con MapLibre GL y la base positron de OpenFreeMap (gratis, sin token). Límites municipales: INEGI.
 
