@@ -13,7 +13,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps<"/[estado]">) {
   const { estado } = await params;
   const l = lugarDeRuta(estado);
-  return l ? metadatosDe(l) : { title: "No encontramos ese lugar · Inavitable", robots: { index: false } };
+  return l ? metadatosDe(l) : { title: "No encontramos ese lugar · Inhabitable", robots: { index: false } };
 }
 
 /** /jalisco: la misma página, con el estado ya elegido (el H1 llega del servidor con su cifra). */

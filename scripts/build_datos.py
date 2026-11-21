@@ -171,7 +171,7 @@ salario_real = [
 
 # Años ahorrando el 30 % del mínimo para la casa típica nacional, cada año (precio y salario del mismo año, nominales).
 serie_anios = [
-    {"y": p["y"], "anios": round(p["nominal"] / anual(salarios[p["y"]]) / AHORRO, 1)}
+    {"y": p["y"], "anios": round(p["nominal"] / anual(salarios[p["y"]]) / AHORRO, 1), "precio": p["nominal"], "salario": salarios[p["y"]]}
     for p in historia("Nacional", int(nacional["mediana"]))
 ]
 pago_info = mensualidad_infonavit(INFO["monto"])

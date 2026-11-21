@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { ALCANZABLE, AHORRO_PCT, D, fmt } from "@/lib/datos";
+import { ALCANZABLE, AHORRO_PCT, D, dinero, fmt, pesos } from "@/lib/datos";
 import { useAncho } from "./useAncho";
 
-type Punto = { y: number; anios: number };
+type Punto = { y: number; anios: number; precio: number; salario: number };
 const SERIE = D.serieAnios as Punto[];
 const TOPE = 80;
 const PICO = SERIE.reduce((a, b) => (b.anios > a.anios ? b : a));
@@ -40,7 +40,7 @@ export default function AniosChart() {
     <figure>
       <figcaption className="mb-4">
         <p className="font-semibold">Años para juntar una casa típica con el salario mínimo</p>
-        <p className="text-[13px] text-ink-3">Ahorrando el {AHORRO_PCT}% · todo México · precio y salario de cada año</p>
+        <p className="text-[13px] text-ink-3">Ahorrando el {AHORRO_PCT}% · todo México · cada año con el precio de la casa y el salario mínimo de ese año</p>
       </figcaption>
       <div ref={ref} className="relative">
         {ancho > 0 && (
@@ -87,9 +87,11 @@ export default function AniosChart() {
         )}
         {i !== null && ancho > 0 && (
           <div className="pointer-events-none absolute top-0 z-10 rounded-lg bg-surface px-3 py-2 text-[13px] shadow-[0_6px_24px_rgba(25,23,20,0.16)] ring-1 ring-black/5"
-            style={{ left: Math.min(Math.max(x(i) - 70, 0), ancho - 140), width: 140 }}>
+            style={{ left: Math.min(Math.max(x(i) - 100, 0), ancho - 200), width: 200 }}>
             <p className="num font-semibold">{SERIE[i].y}</p>
-            <p className="num">{fmt(SERIE[i].anios)} años</p>
+            <p className="num text-ink-2">Casa típica: {dinero(SERIE[i].precio)}</p>
+            <p className="num text-ink-2">Mínimo: {pesos(SERIE[i].salario)} al día</p>
+            <p className="num mt-1 font-bold">{fmt(SERIE[i].anios)} años</p>
           </div>
         )}
       </div>

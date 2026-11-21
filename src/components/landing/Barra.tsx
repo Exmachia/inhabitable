@@ -34,7 +34,7 @@ export default function Barra() {
     <>
       <header className={`fixed inset-x-0 top-0 z-50 border-b-2 transition-colors ${bajo ? "border-ink bg-bg/95 backdrop-blur-md" : "border-transparent bg-bg"}`}>
         <nav aria-label="Principal" className="mx-auto flex h-16 max-w-7xl items-center gap-2 px-4 sm:px-8">
-          <a href="#inicio" aria-label="Inavitable, arriba" className="mr-auto text-[1.45rem]"><Marca /></a>
+          <a href="#inicio" aria-label="Inhabitable, arriba" className="mr-auto text-[1.45rem]"><Marca /></a>
           <ul className="hidden items-center lg:flex">
             {SECCIONES.map((s) => (
               <li key={s.id}>

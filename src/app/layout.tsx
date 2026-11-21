@@ -33,7 +33,7 @@ export const metadata: Metadata = {
   description: DESCRIPCION,
   openGraph: {
     title: TITULO,
-    siteName: "Inavitable",
+    siteName: "Inhabitable",
     description: DESCRIPCION,
     locale: "es_MX",
     type: "website",

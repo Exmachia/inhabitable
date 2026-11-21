@@ -1,5 +1,5 @@
 /**
- * Marca "Inavitable": parodia de INFONAVIT ("inhabitable" + "inevitable"). Nunca usar el logo ni los colores del instituto.
+ * Marca "Inhabitable": juego de palabras con INFONAVIT (una casa que no se puede habitar porque no se puede pagar). Nunca usar el logo ni los colores del instituto.
  * Un tabique como isotipo: cada año de ahorro es uno.
  */
 export default function Marca({ className = "" }: { className?: string }) {
@@ -10,7 +10,7 @@ export default function Marca({ className = "" }: { className?: string }) {
         <rect x="15" y="10" width="13" height="8" rx="1.5" fill="var(--tabique)" />
         <rect x="7.5" y="0" width="13" height="8" rx="1.5" fill="var(--ink)" />
       </svg>
-      <span>Inavitable</span>
+      <span>Inhabitable</span>
     </span>
   );
 }

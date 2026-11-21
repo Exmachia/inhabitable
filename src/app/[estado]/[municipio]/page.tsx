@@ -14,7 +14,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps<"/[estado]/[municipio]">) {
   const { estado, municipio } = await params;
   const l = lugarDeRuta(estado, municipio);
-  return l ? metadatosDe(l) : { title: "No encontramos ese lugar · Inavitable", robots: { index: false } };
+  return l ? metadatosDe(l) : { title: "No encontramos ese lugar · Inhabitable", robots: { index: false } };
 }
 
 /** /jalisco/guadalajara: la misma página, con el municipio ya elegido. */

@@ -29,7 +29,7 @@ export default function Compartir({ l: elegido, propio }: { l: Lugar; propio: bo
   async function nativo() {
     if (navigator.share) {
       try {
-        await navigator.share({ title: "Inavitable", text: texto, url: url() });
+        await navigator.share({ title: "Inhabitable", text: texto, url: url() });
         registrar({ nombre: "compartir", lugar, canal: "nativo" });
         return;
       } catch (e) {
@@ -66,7 +66,7 @@ export default function Compartir({ l: elegido, propio }: { l: Lugar; propio: bo
           <svg aria-hidden viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M16 6l-4-4-4 4M12 2v13" /></svg>
           {copiado ? "Enlace copiado" : "Compartir"}
         </button>
-        <a href={`/historia${ruta === "/" ? "" : ruta}`} download={`inavitable-${ruta === "/" ? "mexico" : slug(nombreCompleto(l))}.png`}
+        <a href={`/historia${ruta === "/" ? "" : ruta}`} download={`inhabitable-${ruta === "/" ? "mexico" : slug(nombreCompleto(l))}.png`}
           onClick={() => registrar({ nombre: "compartir", lugar, canal: "historia" })}
           className="inline-flex min-h-11 items-center gap-2 rounded-full border-2 border-ink bg-surface px-4 text-[14px] font-bold hover:bg-raised">
           <svg aria-hidden viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><rect x="6" y="2.5" width="12" height="19" rx="2.5" /><path d="M12 8v6m-3-3 3 3 3-3" /></svg>

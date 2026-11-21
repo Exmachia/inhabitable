@@ -32,5 +32,5 @@ export function proxy(req: NextRequest) {
 
 export const config = {
   // Solo direcciones de lugar: fuera los archivos (con punto), lo interno de Next, las historias y los datos.
-  matcher: ["/((?!_next|historia|data|maplibre|.*\\.).*)"],
+  matcher: ["/((?!_next|historia|data|maplibre|mapa|.*\\.).*)"],
 };

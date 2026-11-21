@@ -1,3 +1,5 @@
+import Image from "next/image";
+import Link from "next/link";
 import { CONTACTO } from "@/lib/sitio";
 import {
   AHORRO_PCT, ALCANZABLE, D, DATO_MUN, DATO_PRECIOS, INFO, MAS_BARATO, MUN, NAC, PODER_INFO, SM, TITULAR_CAROS, aniosTxt, fechaCorta, fmt, mesAnio, pesos, titularDe,
@@ -7,10 +9,10 @@ import { LugarInicial } from "@/lib/lugar";
 import Buscador from "./Buscador";
 import CaroBarato from "./CaroBarato";
 import ColumnaLugar from "./ColumnaLugar";
-import MapaMexico from "./MapaMexico";
 import Marca from "./Marca";
 import { Ayuda } from "./ui";
 import Aparecer from "./landing/Aparecer";
+import AbrirMapa from "./landing/AbrirMapa";
 import Atajos from "./landing/Atajos";
 import Barra from "./landing/Barra";
 import { AntesPestanas, CreditoBarras } from "./landing/Secciones";
@@ -94,15 +96,24 @@ function Mapa({ conLugar }: { conLugar: boolean }) {
     <section id="mapa" className="scroll-mt-16">
       <div className="mx-auto max-w-7xl px-4 py-20 sm:px-8 lg:py-28">
         <Aparecer>
-          <p className="text-[14px] font-bold text-tabique-oscuro">Por estado y por municipio</p>
-          <h2 className={`mt-3 max-w-[22ch] ${H2}`}>
-            {conLugar ? TITULAR_CAROS : `En ningún estado baja de ${aniosTxt(Math.floor(MAS_BARATO.anios30))} años`}
-          </h2>
-          <p className="mt-5 max-w-[52ch] text-[1.1rem] leading-relaxed text-ink-2">Toca tu estado y luego tu municipio.</p>
+          <Link href="/mapa" aria-label="Abrir el mapa completo"
+            className="group grid overflow-hidden rounded-[28px] border-2 border-ink bg-surface shadow-[0_8px_0_0_var(--ink)] transition-transform hover:-translate-y-0.5 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+            <div className="order-2 flex flex-col justify-center p-6 sm:p-10 lg:order-1">
+              <p className="text-[14px] font-bold text-tabique-oscuro">Por estado y por municipio</p>
+              <h2 className={`mt-3 max-w-[18ch] ${H2}`}>
+                {conLugar ? TITULAR_CAROS : `En ningún estado baja de ${aniosTxt(Math.floor(MAS_BARATO.anios30))} años`}
+              </h2>
+              <p className="mt-4 max-w-[44ch] text-[1.1rem] leading-relaxed text-ink-2">Toca tu estado, elige tu municipio y compáralo con el resto del país.</p>
+            </div>
+            {/* Vista previa del mapa (captura de /mapa). */}
+            <div className="relative order-1 aspect-[16/10] border-b-2 border-ink bg-raised lg:order-2 lg:aspect-auto lg:min-h-[420px] lg:border-b-0 lg:border-l-2">
+              <Image src="/mapa-vista.png" alt="" fill sizes="(min-width: 1024px) 55vw, 100vw" className="object-cover transition-transform duration-500 group-hover:scale-[1.02]" />
+            </div>
+          </Link>
+          <div className="mt-8 flex justify-center lg:justify-start">
+            <AbrirMapa />
+          </div>
         </Aparecer>
-        <div className="mt-10">
-          <MapaMexico />
-        </div>
       </div>
     </section>
   );
@@ -239,31 +250,38 @@ function QuienGana() {
 
   return (
     <section id="quien" className="scroll-mt-16">
-      <div className="mx-auto grid max-w-7xl items-center gap-12 px-4 py-20 sm:px-8 lg:grid-cols-2 lg:py-28">
+      <div className="mx-auto max-w-7xl px-4 py-20 sm:px-8 lg:py-28">
         <Aparecer>
-          <p className="text-[14px] font-bold text-tabique-oscuro">Quién gana eso</p>
-          <div className="mt-3 flex items-start gap-3">
-            <h2 className={H2}>Casi 1 de cada 2 personas que trabajan gana el mínimo o menos</h2>
-            <div className="pt-2"><AyudaQuien /></div>
+          <div className="grid gap-x-12 gap-y-5 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:items-end">
+            <div>
+              <p className="text-[14px] font-bold text-tabique-oscuro">Quién gana eso</p>
+              <div className="mt-3 flex items-start gap-3">
+                <h2 className={H2}>Casi 1 de cada 2 personas que trabajan gana el mínimo o menos</h2>
+                <div className="pt-2"><AyudaQuien /></div>
+              </div>
+            </div>
+            <div>
+              <p className="text-[1.1rem] leading-relaxed text-ink-2">
+                {fmt(ENOE.personasHastaUnSM / 1e6, 1)} millones. A inicios de 2025 eran {Math.round(TEND.antes.pct)} de cada 100; a inicios de 2026, {Math.round(TEND.ahora.pct)}.
+              </p>
+              <p className="mt-2 text-[13px] text-ink-3">INEGI, ENOE, {ENOE.periodo} · publicado el {fechaCorta(ENOE.publicado)} · tendencia: 1.er trim. contra 1.er trim., vía prensa</p>
+            </div>
           </div>
-          <p className="mt-5 text-[1.1rem] leading-relaxed text-ink-2">
-            {fmt(ENOE.personasHastaUnSM / 1e6, 1)} millones. A inicios de 2025 eran {Math.round(TEND.antes.pct)} de cada 100; a inicios de 2026, {Math.round(TEND.ahora.pct)}.
-          </p>
-          <p className="mt-2 text-[13px] text-ink-3">INEGI, ENOE, {ENOE.periodo} · publicado el {fechaCorta(ENOE.publicado)} · tendencia: 1.er trim. contra 1.er trim., vía prensa</p>
         </Aparecer>
         <Aparecer retraso={120}>
-          <figure className="rounded-[28px] border-2 border-ink bg-surface p-5 sm:p-7">
-            <div className="grid grid-cols-10 gap-x-1.5 gap-y-2" role="img"
+          {/* Tarjeta ancha y baja: 100 personas en 5 filas de 20 (10 por fila en celular) y la leyenda en una fila. */}
+          <figure className="mt-10 rounded-[28px] border-2 border-ink bg-surface p-5 sm:p-8">
+            <div className="grid grid-cols-10 gap-x-1.5 gap-y-2 sm:grid-cols-20 sm:gap-x-2" role="img"
               aria-label={`De cada 100 personas que trabajan: ${grupos.map((g, i) => `${g.label}, ${cuadros[i]}`).join("; ")}.`}>
               {personas.map((g, i) => (
-                <svg key={i} viewBox="0 0 20 36" className="h-auto w-full" aria-hidden>
+                <svg key={i} viewBox="0 0 20 36" className="mx-auto h-auto w-full max-w-[34px]" aria-hidden>
                   <circle cx="10" cy="5.5" r="5" fill={g.color} stroke={g.id === "ns" ? "var(--line-strong)" : "none"} />
                   <path d="M2 16a8 8 0 0 1 16 0v9h-3v11H5V25H2Z" fill={g.color} stroke={g.id === "ns" ? "var(--line-strong)" : "none"} />
                 </svg>
               ))}
             </div>
-            <figcaption>
-              <ul className="mt-6 grid gap-2 text-[15px]">
+            <figcaption className="mt-6 border-t-2 border-line pt-5">
+              <ul className="grid gap-x-8 gap-y-2 text-[15px] sm:grid-cols-2 lg:grid-cols-4">
                 {grupos.map((g, i) => (
                   <li key={g.id} className="flex items-center gap-3">
                     <span aria-hidden className="size-3.5 shrink-0 rounded-full ring-1 ring-black/15" style={{ background: g.color }} />

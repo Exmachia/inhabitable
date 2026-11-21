@@ -68,7 +68,7 @@ async function desdeHashViejo(): Promise<Lugar | null | undefined> {
 
 function avisar(l: Lugar | null) {
   actual = l;
-  document.title = l ? `${titularDe(l)} · Inavitable` : TITULO;
+  document.title = l ? `${titularDe(l)} · Inhabitable` : TITULO;
   window.dispatchEvent(new Event(EVENTO));
 }
 

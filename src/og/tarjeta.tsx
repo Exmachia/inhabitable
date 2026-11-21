@@ -72,7 +72,7 @@ function Marca({ tam }: { tam: number }) {
         <rect x="15" y="10" width="13" height="8" rx="1.5" fill={TABIQUE} />
         <rect x="7.5" y="0" width="13" height="8" rx="1.5" fill={CARBON} />
       </svg>
-      <span>Inavitable</span>
+      <span>Inhabitable</span>
     </div>
   );
 }
