@@ -79,7 +79,11 @@ export default function MapaCompleto() {
 
   // Dirección → selección (al cargar, cuando llegan los municipios y con atrás/adelante).
   useEffect(() => {
-    const leer = () => setSel(selDeUrl(municipios));
+    const leer = () => {
+      const s = selDeUrl(municipios);
+      setSel(s);
+      if (s.estado) setNivel("medio"); // si llega con un lugar (enlace compartido), la hoja muestra su ficha
+    };
     leer();
     window.addEventListener("popstate", leer);
     return () => window.removeEventListener("popstate", leer);

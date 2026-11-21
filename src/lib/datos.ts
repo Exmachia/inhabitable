@@ -202,7 +202,7 @@ export const MAS_BARATO = ESTADOS.at(-1)!;
 
 /** Titular de un lugar: "En Guadalajara, juntar para una casa con el salario mínimo toma 87 años". */
 export function titularDe(l: Lugar) {
-  const donde = l.tipo === "pais" ? "todo México" : l.nombre;
+  const donde = l.tipo === "pais" ? "todo México" : l.tipo === "estado" ? conArticulo(l.nombre) : l.nombre;
   const a = l.tope ? `más de ${TOPE_ANIOS}` : aniosTxt(cuentas(l).ahorrando);
   return `En ${donde}, juntar para una casa con el salario mínimo toma ${a} años`;
 }
