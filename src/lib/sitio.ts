@@ -6,7 +6,7 @@ const vercel = process.env.VERCEL_ENV === "production" ? process.env.VERCEL_PROJ
 export const SITIO = process.env.NEXT_PUBLIC_SITE_URL ?? (vercel ? `https://${vercel}` : "http://localhost:3200");
 
 /** Título de la portada (y de la pestaña cuando no hay lugar elegido). */
-export const TITULO = "Inhabitable — una casa cuesta toda una vida de salario mínimo";
+export const TITULO = "Inhabitable: una casa cuesta toda una vida de salario mínimo";
 
 /** Para quien tenga datos, sepa del tema o quiera ayudar. */
-export const CONTACTO = "https://www.linkedin.com/in/eduardo-chacon-171367275/";
+export const CONTACTO = "https://www.linkedin.com/in/eduardo-chac%C3%B3n-171367275/";

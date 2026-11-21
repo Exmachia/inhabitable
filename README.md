@@ -114,6 +114,6 @@ el nombre es un juego de palabras.
 
 Proyecto hermano de [**Sinagua**](https://www.sinagua.org), sobre la falta de agua en México.
 
-¿Tienes datos, sabes del tema o quieres ayudar? [Escríbeme en LinkedIn](https://www.linkedin.com/in/eduardo-chacon-171367275/)
+¿Tienes datos, sabes del tema o quieres ayudar? [Escríbeme en LinkedIn](https://www.linkedin.com/in/eduardo-chac%C3%B3n-171367275/)
 
 </div>
